@@ -507,7 +507,7 @@
     "rootsclassic.mortar.disabled": "Recipe disabled",
     "rootsclassic.mortar.mixin": "Recipe found but missing a Rare Material mixin",
 
-    "entity.rootsclassic.skeleton_phantom": "Phantom Skeleton",
+    "entity.rootsclassic.phantom_skeleton": "Phantom Skeleton",
     "entity.rootsclassic.tile_accelerator": "Tile Accelerator",
     "entity.rootsclassic.entity_accelerator": "Entity Accelerator",
 
