@@ -13,15 +13,16 @@ group = project.maven_group
 repositories {
 	mavenCentral()
 	maven { url "https://maven.parchmentmc.org" }
-	maven { url "https://mvn.devos.one/snapshots/" }
+	maven { url "https://mvn.devos.one/releases/" }
 	maven { url "https://jitpack.io" }
-	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
+	maven { url "https://maven.ladysnake.org/releases" }
 	maven { url "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
 	maven { url "https://maven.blamejared.com/" }
 	maven { url "https://modmaven.dev" }
 	maven { url "https://maven.terraformersmc.com/" }
 	maven { url "https://maven.vram.io/" }
 	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
 }
 
 dependencies {
@@ -32,7 +33,23 @@ dependencies {
 		officialMojangMappings()
 		parchment("org.parchmentmc.data:parchment-${project.parchment_version}@zip")
 	}
-	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:Porting-Lib:${project.portinglib_version}"))
+
+	// Manual include of reach-entity-attributes because Porting-Lib:base depends on it but can't find it at its current Maven URL
+	modImplementation(include("com.jamieswhiteshirt:reach-entity-attributes:2.4.0"))
+	// Porting-Lib has now broken out into smaller submodules to keep the package light
+	//  These are each of the specific required includes for this project. Full list here:
+	//  https://github.com/Fabricators-of-Create/Porting-Lib?tab=readme-ov-file#modules
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:base:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:client_events:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:common:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:core:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:data:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:entity:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:items:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:loot:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:tags:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:transfer:${project.portinglib_version}"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:utility:${project.portinglib_version}"))
 	modImplementation(include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cc_version}"))
 	modImplementation(include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cc_version}"))
 	modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.configapi_version}"

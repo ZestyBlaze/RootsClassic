@@ -39,7 +39,7 @@ public class ImbuerBlockEntity extends BEBase {
         }
 
         @Override
-        public boolean isItemValid(int slot, ItemVariant stack) {
+        public boolean isItemValid(int slot, ItemVariant stack, int count) {
             if (slot == 0) {
                 return stack.toStack().is(Tags.Items.RODS_WOODEN);
             } else {

@@ -4,8 +4,8 @@ import elucent.rootsclassic.Const;
 import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.registry.RootsRegistry;
 import elucent.rootsclassic.util.RootsUtil;
-import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingEntityDamageEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingEntityEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingHurtEvent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,7 +23,8 @@ public class ComponentSpellsEvent {
     }
 
     private static void onLivingTick() {
-        LivingEntityEvents.TICK.register(livingEntity -> {
+        LivingEntityEvents.LivingTickEvent.TICK.register(listener -> {
+            LivingEntity livingEntity = listener.getEntity();
             if(livingEntity instanceof Player) {
                 // armor regen if full set
                 wildwoodArmorRegenFullset((Player)livingEntity);
@@ -78,16 +79,16 @@ public class ComponentSpellsEvent {
      */
 
     private static void onLivingDamage() {
-        LivingEntityDamageEvents.HURT.register((event) -> {
-            LivingEntity entityLiving = event.damaged;
-            DamageSource damageSource = event.damageSource;
+        LivingHurtEvent.HURT.register((event) -> {
+            LivingEntity entityLiving = event.getEntity();
+            DamageSource damageSource = event.getSource();
 
             CompoundTag persistentData = entityLiving.getCustomData();
             if (persistentData.contains(Const.NBT_VULN)) {
-                event.damageAmount = (float) (event.damageAmount * (1.0 + persistentData.getDouble(Const.NBT_VULN)));
+                event.setAmount((float) (event.getAmount() * (1.0 + persistentData.getDouble(Const.NBT_VULN))));
                 persistentData.remove(Const.NBT_VULN);
             }
-            if (persistentData.contains(Const.NBT_THORNS) && event.damageSource.getEntity() instanceof LivingEntity) {
+            if (persistentData.contains(Const.NBT_THORNS) && event.getSource().getEntity() instanceof LivingEntity) {
                 ((LivingEntity) damageSource.getEntity()).hurt(entityLiving.damageSources().cactus(), persistentData.getFloat(Const.NBT_THORNS));
                 persistentData.remove(Const.NBT_THORNS);
                 RootsUtil.decrementTickTracking(entityLiving);
@@ -99,7 +100,7 @@ public class ComponentSpellsEvent {
                         int stepLvl = sword.getTag().getInt("shadowstep");
                         double chance = stepLvl * 12.5;
                         if (player.getCommandSenderWorld().random.nextInt(100) < chance) {
-                            event.setCancelled(true);
+                            event.setCanceled(true);
                         }
                     }
                 }
@@ -119,14 +120,14 @@ public class ComponentSpellsEvent {
                             if ((tag.contains("holy")) && entityLiving.getMobType() == MobType.UNDEAD) {
                                 int holyLvl = tag.getInt("holy");
                                 float amount = holyLvl * 1.5f;
-                                float currentAmount = event.damageAmount;
-                                event.damageAmount = (currentAmount + amount);
+                                float currentAmount = event.getAmount();
+                                event.setAmount(currentAmount + amount);
                             }
                             if (tag.contains("spikes")) {
                                 int spikeLvl = tag.getInt("spikes");
                                 float amount = spikeLvl;
-                                float currentAmount = event.damageAmount;
-                                event.damageAmount = (currentAmount + amount);
+                                float currentAmount = event.getAmount();
+                                event.setAmount(currentAmount + amount);
                             }
                         }
                     }
