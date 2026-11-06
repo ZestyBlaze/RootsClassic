@@ -8,8 +8,6 @@ import elucent.rootsclassic.client.particles.MagicParticleData;
 import elucent.rootsclassic.component.ComponentBase;
 import elucent.rootsclassic.component.ComponentBaseRegistry;
 import elucent.rootsclassic.component.EnumCastType;
-import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
-import io.github.fabricators_of_create.porting_lib.item.UsingTickItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -30,8 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CrystalStaffItem extends Item implements IManaRelatedItem, UsingTickItem, ReequipAnimationItem {
-
+public class CrystalStaffItem extends Item implements IManaRelatedItem {
     public CrystalStaffItem(Properties properties) {
         super(properties);
     }
@@ -121,18 +118,18 @@ public class CrystalStaffItem extends Item implements IManaRelatedItem, UsingTic
     }
 
     @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldS, ItemStack newS, boolean slotChanged) {
-        if (oldS.hasTag() && newS.hasTag()) {
-            if (!CrystalStaffItem.getEffect(oldS).equals(CrystalStaffItem.getEffect(newS)) ||
-                    oldS.getTag().getInt(Const.NBT_SELECTED) != newS.getTag().getInt(Const.NBT_SELECTED) || slotChanged) {
+    public boolean allowNbtUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
+        if (oldStack.hasTag() && newStack.hasTag()) {
+            if (!CrystalStaffItem.getEffect(oldStack).equals(CrystalStaffItem.getEffect(newStack)) ||
+                    oldStack.getTag().getInt(Const.NBT_SELECTED) != newStack.getTag().getInt(Const.NBT_SELECTED)) {
                 return true;
             }
         }
-        return slotChanged;
+        return super.allowNbtUpdateAnimation(player, hand, oldStack, newStack);
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+    public void onUseTick(Level level, LivingEntity player, ItemStack stack, int count) {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag();
             String effect = CrystalStaffItem.getEffect(stack);

@@ -1,17 +1,6 @@
 package elucent.rootsclassic.compat.emi.recipe;
 
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.stack.EmiIngredient;
-import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.WidgetHolder;
-import elucent.rootsclassic.Const;
-import elucent.rootsclassic.compat.emi.EMIPlugin;
-import elucent.rootsclassic.recipe.ComponentRecipe;
-import net.minecraft.resources.ResourceLocation;
-
-import java.util.List;
-
+/*
 public class MortarRecipe implements EmiRecipe {
 	private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Const.MODID, "textures/gui/tabletmortar.png");
 	
@@ -70,3 +59,4 @@ public class MortarRecipe implements EmiRecipe {
 		widgets.addSlot(EmiStack.of(recipe.assemble(null)), 122, 25).drawBack(false).recipeContext(this);
 	}
 }
+ */

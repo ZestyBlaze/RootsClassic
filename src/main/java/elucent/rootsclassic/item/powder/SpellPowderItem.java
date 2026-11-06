@@ -3,7 +3,6 @@ package elucent.rootsclassic.item.powder;
 import elucent.rootsclassic.Const;
 import elucent.rootsclassic.component.ComponentBase;
 import elucent.rootsclassic.component.ComponentBaseRegistry;
-import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -18,15 +17,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SpellPowderItem extends Item implements ReequipAnimationItem {
+public class SpellPowderItem extends Item {
 
     public SpellPowderItem(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldS, ItemStack newS, boolean slotChanged) {
-        return slotChanged;
     }
 
     public static void createData(ItemStack stack, ResourceLocation effect, Container inventory) {

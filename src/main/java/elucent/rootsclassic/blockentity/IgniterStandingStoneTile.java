@@ -22,7 +22,7 @@ public class IgniterStandingStoneTile extends BEBase {
     }
 
     public IgniterStandingStoneTile(BlockPos pos, BlockState state) {
-        this(RootsRegistry.IGNITER_STANDING_STONE_TILE.get(), pos, state);
+        this(RootsRegistry.IGNITER_STANDING_STONE_TILE, pos, state);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class IgniterStandingStoneTile extends BEBase {
             List<LivingEntity> nearbyCreatures = level.getEntitiesOfClass(LivingEntity.class,
                     new AABB(pos.getX() - RADIUS, pos.getY() - VRADIUS, pos.getZ() - RADIUS,
                             pos.getX() + RADIUS, pos.getY() + VRADIUS, pos.getZ() + RADIUS));
-            if (nearbyCreatures.size() > 0) {
+            if (!nearbyCreatures.isEmpty()) {
                 for (LivingEntity nearbyCreature : nearbyCreatures) {
                     nearbyCreature.setSecondsOnFire(2);
                 }

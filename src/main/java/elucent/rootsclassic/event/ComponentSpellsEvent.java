@@ -2,9 +2,9 @@ package elucent.rootsclassic.event;
 
 import elucent.rootsclassic.Const;
 import elucent.rootsclassic.capability.RootsCapabilityManager;
+import elucent.rootsclassic.internal.LivingHurtCallback;
 import elucent.rootsclassic.registry.RootsRegistry;
 import elucent.rootsclassic.util.RootsUtil;
-import io.github.fabricators_of_create.porting_lib.event.common.LivingEntityEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,35 +17,24 @@ public class ComponentSpellsEvent {
     public static int TICKS_PER_MANA_REGEN = 5;
 
     public static void registerEvents() {
-        onLivingTick();
         onLivingDamage();
     }
 
-    private static void onLivingTick() {
-        LivingEntityEvents.TICK.register(livingEntity -> {
-            if(livingEntity instanceof Player) {
-                // armor regen if full set
-                wildwoodArmorRegenFullset((Player)livingEntity);
-                tickManaRegen(livingEntity);
-            }
-        });
-    }
-
-    private static void tickManaRegen(LivingEntity entity) {
+    public static void tickManaRegen(LivingEntity entity) {
         if (entity.tickCount % TICKS_PER_MANA_REGEN == 0) {
             RootsCapabilityManager.MANA_CAPABILITY.maybeGet(entity).ifPresent(cap -> cap.setMana(cap.getMana() + 1.0f));
         }
     }
 
-    private static void wildwoodArmorRegenFullset(Player entity) {
+    public static void wildwoodArmorRegenFullset(Player entity) {
         ItemStack head = entity.getItemBySlot(EquipmentSlot.HEAD);
         ItemStack chest = entity.getItemBySlot(EquipmentSlot.CHEST);
         ItemStack legs = entity.getItemBySlot(EquipmentSlot.LEGS);
         ItemStack feet = entity.getItemBySlot(EquipmentSlot.FEET);
-        if (head.getItem() == RootsRegistry.WILDWOOD_MASK.get() &&
-                chest.getItem() == RootsRegistry.WILDWOOD_PLATE.get() &&
-                legs.getItem() == RootsRegistry.WILDWOOD_LEGGINGS.get() &&
-                feet.getItem() == RootsRegistry.WILDWOOD_BOOTS.get()) {
+        if (head.getItem() == RootsRegistry.WILDWOOD_MASK &&
+                chest.getItem() == RootsRegistry.WILDWOOD_PLATE &&
+                legs.getItem() == RootsRegistry.WILDWOOD_LEGGINGS &&
+                feet.getItem() == RootsRegistry.WILDWOOD_BOOTS) {
             //
             if (entity.level.random.nextDouble() < 0.02 && entity.getHealth() < entity.getMaxHealth()) {
                 entity.heal(1);//1 half heart
@@ -77,19 +66,19 @@ public class ComponentSpellsEvent {
      */
 
     private static void onLivingDamage() {
-        LivingEntityEvents.ACTUALLY_HURT.register((damageSource, entityLiving, v) -> {
-            CompoundTag persistentData = entityLiving.getExtraCustomData();
+        LivingHurtCallback.ACTUALLY_HURT.register((damageSource, entityLiving, v) -> {
+            CompoundTag persistentData = entityLiving.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData();
             if (persistentData.contains(Const.NBT_VULN)) {
                 v = (float) (v * (1.0 + persistentData.getDouble(Const.NBT_VULN)));
                 persistentData.remove(Const.NBT_VULN);
             }
             if (persistentData.contains(Const.NBT_THORNS) && damageSource.getEntity() instanceof LivingEntity) {
-                ((LivingEntity) damageSource.getEntity()).hurt(DamageSource.CACTUS, persistentData.getFloat(Const.NBT_THORNS));
+                damageSource.getEntity().hurt(DamageSource.CACTUS, persistentData.getFloat(Const.NBT_THORNS));
                 persistentData.remove(Const.NBT_THORNS);
                 RootsUtil.decrementTickTracking(entityLiving);
             }
             if (entityLiving instanceof Player player) {
-                if (!player.getInventory().getSelected().isEmpty() && player.getInventory().getSelected().getItem() == RootsRegistry.ENGRAVED_BLADE.get()) {
+                if (!player.getInventory().getSelected().isEmpty() && player.getInventory().getSelected().getItem() == RootsRegistry.ENGRAVED_BLADE) {
                     ItemStack sword = player.getInventory().getSelected();
                     if (sword.hasTag() && sword.getTag().contains("shadowstep")) {
                         int stepLvl = sword.getTag().getInt("shadowstep");
@@ -103,7 +92,7 @@ public class ComponentSpellsEvent {
             if (damageSource.getEntity() instanceof Player) {
                 if (!entityLiving.getCommandSenderWorld().isClientSide) {
                     Player player = (Player) damageSource.getEntity();
-                    if (!player.getInventory().getSelected().isEmpty() && player.getInventory().getSelected().getItem() == RootsRegistry.ENGRAVED_BLADE.get()) {
+                    if (!player.getInventory().getSelected().isEmpty() && player.getInventory().getSelected().getItem() == RootsRegistry.ENGRAVED_BLADE) {
                         ItemStack sword = player.getInventory().getSelected();
                         if (sword.hasTag()) {
                             CompoundTag tag = sword.getTag();

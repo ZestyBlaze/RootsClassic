@@ -7,8 +7,7 @@ import elucent.rootsclassic.compat.jei.wrapper.RitualWrapper;
 import elucent.rootsclassic.recipe.ComponentRecipe;
 import elucent.rootsclassic.registry.RootsRecipes;
 import elucent.rootsclassic.registry.RootsRegistry;
-import elucent.rootsclassic.ritual.RitualRegistry;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import elucent.rootsclassic.ritual.RitualBaseRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -21,6 +20,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -54,8 +54,8 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(RootsRegistry.MORTAR.get()), MORTAR_TYPE);
-        registration.addRecipeCatalyst(new ItemStack(RootsRegistry.ALTAR.get()), RITUAL_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(RootsRegistry.MORTAR), MORTAR_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(RootsRegistry.ALTAR), RITUAL_TYPE);
     }
 
     @Override
@@ -70,24 +70,21 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        for (RegistryObject<Item> registryObject : RootsRegistry.ITEMS.getEntries()) {
-            Item item = registryObject.get();
-            if (item != null) {
-                registration.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM_STACK, Component.translatable(item.getDescriptionId() + ".guide"));
+        for (Item registryObject : Registry.ITEM.stream().filter(item -> Registry.ITEM.getKey(item).getNamespace().equals(Const.MODID)).toList()) {
+            if (registryObject != null) {
+                registration.addIngredientInfo(new ItemStack(registryObject), VanillaTypes.ITEM_STACK, Component.translatable(registryObject.getDescriptionId() + ".guide"));
             }
         }
-        assert MORTAR_TYPE != null;
-        assert RITUAL_TYPE != null;
 
         ClientLevel world = Objects.requireNonNull(Minecraft.getInstance().level);
-        registration.addRecipes(MORTAR_TYPE, world.getRecipeManager().getAllRecipesFor(RootsRecipes.COMPONENT_RECIPE_TYPE.get()));
+        registration.addRecipes(MORTAR_TYPE, world.getRecipeManager().getAllRecipesFor(RootsRecipes.COMPONENT_RECIPE_TYPE));
         registration.addRecipes(RITUAL_TYPE, getRituals());
     }
 
     public List<RitualWrapper> getRituals() {
         List<RitualWrapper> entries = new LinkedList<>();
 
-        RitualRegistry.RITUALS.getEntries().forEach(ritual -> entries.add(new RitualWrapper(ritual.get())));
+        RitualBaseRegistry.RITUALS.stream().iterator().forEachRemaining(ritualBase -> entries.add(new RitualWrapper(ritualBase)));
 
         return entries;
     }

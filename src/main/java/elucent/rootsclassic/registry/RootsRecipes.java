@@ -2,18 +2,16 @@ package elucent.rootsclassic.registry;
 
 import elucent.rootsclassic.Const;
 import elucent.rootsclassic.recipe.ComponentRecipe;
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Registry;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class RootsRecipes {
-    public static final LazyRegistrar<RecipeSerializer<?>> RECIPE_SERIALIZERS = LazyRegistrar.create(Registry.RECIPE_SERIALIZER, Const.MODID);
-    public static final LazyRegistrar<RecipeType<?>> RECIPE_TYPES = LazyRegistrar.create(Registry.RECIPE_TYPE_REGISTRY, Const.MODID);
+    public static final RecipeType<ComponentRecipe> COMPONENT_RECIPE_TYPE = new RecipeType<>(){};
+    public static final ComponentRecipe.SerializeComponentRecipe COMPONENT_SERIALIZER = new ComponentRecipe.SerializeComponentRecipe();
 
-
-    public static final RegistryObject<RecipeType<ComponentRecipe>> COMPONENT_RECIPE_TYPE = RECIPE_TYPES.register("component", () -> new RecipeType<>() {
-    });
-    public static final RegistryObject<ComponentRecipe.SerializeComponentRecipe> COMPONENT_SERIALIZER = RECIPE_SERIALIZERS.register("component", ComponentRecipe.SerializeComponentRecipe::new);
+    public static void register() {
+        Registry.register(Registry.RECIPE_TYPE, new ResourceLocation(Const.MODID, "component"), COMPONENT_RECIPE_TYPE);
+        Registry.register(Registry.RECIPE_SERIALIZER, new ResourceLocation(Const.MODID, "component"), COMPONENT_SERIALIZER);
+    }
 }

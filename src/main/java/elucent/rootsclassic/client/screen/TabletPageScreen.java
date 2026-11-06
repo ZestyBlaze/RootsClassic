@@ -176,12 +176,12 @@ public class TabletPageScreen extends Screen {
                     int xShift = 0;
                     int yShift = 0;
                     this.blit(poseStack, basePosX + 93, basePosY + 153, 192, 32, 16, 16);
-                    if (page.altarRecipe.getBlocks().get(i).equals(RootsRegistry.MUNDANE_STANDING_STONE.get())) {
+                    if (page.altarRecipe.getBlocks().get(i).equals(RootsRegistry.MUNDANE_STANDING_STONE)) {
                         v = 48;
                         xShift = 8 * (int) page.altarRecipe.getPositionsRelative().get(i).getX();
                         yShift = 8 * (int) page.altarRecipe.getPositionsRelative().get(i).getZ();
                     }
-                    if (page.altarRecipe.getBlocks().get(i).equals(RootsRegistry.ATTUNED_STANDING_STONE.get())) {
+                    if (page.altarRecipe.getBlocks().get(i).equals(RootsRegistry.ATTUNED_STANDING_STONE)) {
                         v = 64;
                         xShift = 8 * (int) page.altarRecipe.getPositionsRelative().get(i).getX();
                         yShift = 8 * (int) page.altarRecipe.getPositionsRelative().get(i).getZ();

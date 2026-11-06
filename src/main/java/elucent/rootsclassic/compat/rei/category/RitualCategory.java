@@ -30,7 +30,7 @@ public class RitualCategory implements DisplayCategory<RitualDisplay> {
     private final Component localizedName;
 
     public RitualCategory() {
-        this.icon = EntryStacks.of(RootsRegistry.ALTAR.get());
+        this.icon = EntryStacks.of(RootsRegistry.ALTAR);
         this.localizedName = Component.translatable("rootsclassic.gui.jei.category.ritual");
     }
 
@@ -99,13 +99,13 @@ public class RitualCategory implements DisplayCategory<RitualDisplay> {
                 int xShift = 0;
                 int yShift = 0;
                 stone.render(stack, mouseX, mouseY, delta);
-                if (blocks.get(i).equals(RootsRegistry.MUNDANE_STANDING_STONE.get())) {
+                if (blocks.get(i).equals(RootsRegistry.MUNDANE_STANDING_STONE)) {
                     xShift = 8 * (int) relativePosition.get(i).getX();
                     yShift = 8 * (int) relativePosition.get(i).getZ();
                     RenderSystem.setShaderTexture(0, location);
                     helper.blit(stack, basePosX + xShift + 4, basePosY + yShift + 4, 192, 48, 16, 16);
                 }
-                if (blocks.get(i).equals(RootsRegistry.ATTUNED_STANDING_STONE.get())) {
+                if (blocks.get(i).equals(RootsRegistry.ATTUNED_STANDING_STONE)) {
                     xShift = 8 * (int) relativePosition.get(i).getX();
                     yShift = 8 * (int) relativePosition.get(i).getZ();
                     RenderSystem.setShaderTexture(0, location);

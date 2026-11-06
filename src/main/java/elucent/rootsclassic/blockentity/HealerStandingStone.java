@@ -24,7 +24,7 @@ public class HealerStandingStone extends BEBase {
     }
 
     public HealerStandingStone(BlockPos pos, BlockState state) {
-        this(RootsRegistry.HEALER_STANDING_STONE_TILE.get(), pos, state);
+        this(RootsRegistry.HEALER_STANDING_STONE_TILE, pos, state);
     }
 
     @Override

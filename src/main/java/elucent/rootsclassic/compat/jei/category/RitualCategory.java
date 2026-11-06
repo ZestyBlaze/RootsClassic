@@ -40,7 +40,7 @@ public class RitualCategory implements IRecipeCategory<RitualWrapper> {
     public RitualCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(backgroundLocation, 0, 0, 94, 100).addPadding(0, 0, 0, 0).build();
 
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(RootsRegistry.ALTAR.get()));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(RootsRegistry.ALTAR));
 
         this.ingredientBackground = guiHelper.createDrawable(location, 61, 53, 70, 22);
         this.resultBackground = guiHelper.createDrawable(location, 61, 53, 22, 22);
@@ -107,12 +107,12 @@ public class RitualCategory implements IRecipeCategory<RitualWrapper> {
             int xShift = 0;
             int yShift = 0;
             stone.draw(stack, basePosX, basePosY);
-            if (blocks.get(i).equals(RootsRegistry.MUNDANE_STANDING_STONE.get())) {
+            if (blocks.get(i).equals(RootsRegistry.MUNDANE_STANDING_STONE)) {
                 xShift = 8 * (int) relativePosition.get(i).getX();
                 yShift = 8 * (int) relativePosition.get(i).getZ();
                 mundaneStone.draw(stack, basePosX + xShift, basePosY + yShift);
             }
-            if (blocks.get(i).equals(RootsRegistry.ATTUNED_STANDING_STONE.get())) {
+            if (blocks.get(i).equals(RootsRegistry.ATTUNED_STANDING_STONE)) {
                 xShift = 8 * (int) relativePosition.get(i).getX();
                 yShift = 8 * (int) relativePosition.get(i).getZ();
                 attunedStone.draw(stack, basePosX + xShift, basePosY + yShift);

@@ -2,15 +2,14 @@ package elucent.rootsclassic.block.brazier;
 
 import elucent.rootsclassic.blockentity.BEBase;
 import elucent.rootsclassic.registry.RootsRegistry;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 
 public class BrazierBlockEntity extends BEBase {
     private static final int TOTAL_BURN_TIME = 2400;
@@ -27,26 +25,25 @@ public class BrazierBlockEntity extends BEBase {
     private int ticker = 0;
     private boolean burning = false;
     private int progress = 0;
-    public final ItemStackHandler inventory = new ItemStackHandler(1) {
+    public final SimpleContainer inventory = new SimpleContainer(1) {
         @Override
-        protected int getStackLimit(int slot, @NotNull ItemVariant stack) {
+        public int getMaxStackSize() {
             return 1;
         }
     };
-    private LazyOptional<ItemStackHandler> inventoryHolder = LazyOptional.of(() -> inventory);
+    private InventoryStorage inventoryWrapper = InventoryStorage.of(inventory, null);
 
     public BrazierBlockEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
     }
 
     public BrazierBlockEntity(BlockPos pos, BlockState state) {
-        super(RootsRegistry.BRAZIER_TILE.get(), pos, state);
+        super(RootsRegistry.BRAZIER_TILE, pos, state);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        inventory.deserializeNBT(tag.getCompound("InventoryHandler"));
         if (tag.contains("burning")) {
             setBurning(tag.getBoolean("burning"));
         }
@@ -58,7 +55,6 @@ public class BrazierBlockEntity extends BEBase {
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("InventoryHandler", inventory.serializeNBT());
         tag.putBoolean("burning", isBurning());
         tag.putInt("progress", progress);
     }
@@ -194,16 +190,10 @@ public class BrazierBlockEntity extends BEBase {
     }
 
     public ItemStack getHeldItem() {
-        return inventory.getStackInSlot(0);
+        return inventory.getItem(0);
     }
 
     public void setHeldItem(ItemStack heldItem) {
-        inventory.setStackInSlot(0, heldItem);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        inventoryHolder.invalidate();
+        inventory.setItem(0, heldItem);
     }
 }

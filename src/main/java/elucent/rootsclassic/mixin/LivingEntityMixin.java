@@ -1,6 +1,7 @@
 package elucent.rootsclassic.mixin;
 
 import elucent.rootsclassic.Const;
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.util.RootsUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +22,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void rootsclassic_tick(CallbackInfo ci) {
         LivingEntity entity = ((LivingEntity)(Object)this);
-        CompoundTag persistentData = entity.getExtraCustomData();
+        CompoundTag persistentData = entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData();
         if (persistentData.contains(Const.NBT_TRACK_TICKS) && persistentData.contains(Const.NBT_SKIP_TICKS)) {
             int skipTicks = persistentData.getInt(Const.NBT_SKIP_TICKS);
             if (skipTicks > 0) {

@@ -2,7 +2,7 @@ package elucent.rootsclassic.blockentity;
 
 import elucent.rootsclassic.client.particles.MagicAuraParticleData;
 import elucent.rootsclassic.registry.RootsRegistry;
-import me.alphamode.forgetags.Tags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -25,32 +25,32 @@ public class AestheticStandingStoneTile extends BEBase {
     }
 
     public AestheticStandingStoneTile(BlockPos pos, BlockState state) {
-        this(RootsRegistry.AESTHETIC_STANDING_STONE_TILE.get(), pos, state);
+        this(RootsRegistry.AESTHETIC_STANDING_STONE_TILE, pos, state);
     }
 
     @Override
     public InteractionResult activate(Level levelAccessor, BlockPos pos, BlockState state, Player player, InteractionHand hand, ItemStack heldItem, BlockHitResult hit) {
         if (heldItem != null) {
             int amount = 5;
-            if (heldItem.is(Tags.Items.DYES_RED)) {
+            if (heldItem.is(ConventionalItemTags.RED_DYES)) {
                 if (r < 255) {
                     r += amount;
                     return InteractionResult.SUCCESS;
                 }
             }
-            if (heldItem.is(Tags.Items.DYES_GREEN)) {
+            if (heldItem.is(ConventionalItemTags.GREEN_DYES)) {
                 if (g < 255) {
                     g += amount;
                     return InteractionResult.SUCCESS;
                 }
             }
-            if (heldItem.is(Tags.Items.DYES_BLUE)) {
+            if (heldItem.is(ConventionalItemTags.BLUE_DYES)) {
                 if (b < 255) {
                     b += amount;
                     return InteractionResult.SUCCESS;
                 }
             }
-            if (heldItem.is(Tags.Items.DYES_WHITE)) {
+            if (heldItem.is(ConventionalItemTags.WHITE_DYES)) {
                 r = 0;
                 g = 0;
                 b = 0;

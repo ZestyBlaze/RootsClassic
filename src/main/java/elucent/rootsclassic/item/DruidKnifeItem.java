@@ -1,5 +1,6 @@
 package elucent.rootsclassic.item;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap.Builder;
 import elucent.rootsclassic.config.RootsConfig;
 import elucent.rootsclassic.registry.RootsRegistry;
@@ -33,7 +34,7 @@ public class DruidKnifeItem extends Item {
             //			.put(Blocks.WARPED_STEM, Blocks.STRIPPED_WARPED_STEM).put(Blocks.WARPED_HYPHAE, Blocks.STRIPPED_WARPED_HYPHAE)
             //			.put(Blocks.CRIMSON_STEM, Blocks.STRIPPED_CRIMSON_STEM).put(Blocks.CRIMSON_HYPHAE, Blocks.STRIPPED_CRIMSON_HYPHAE)
             .build();
-    protected static final Map<Block, Supplier<Item>> BLOCK_BARK_MAP = (new Builder<Block, Supplier<Item>>())
+    protected static final Supplier<Map<Block, Item>> BLOCK_BARK_MAP = Suppliers.memoize(() -> (new Builder<Block, Item>())
             .put(Blocks.OAK_WOOD, RootsRegistry.OAK_BARK).put(Blocks.OAK_LOG, RootsRegistry.OAK_BARK)
             .put(Blocks.DARK_OAK_WOOD, RootsRegistry.DARK_OAK_BARK).put(Blocks.DARK_OAK_LOG, RootsRegistry.DARK_OAK_BARK)
             .put(Blocks.ACACIA_WOOD, RootsRegistry.ACACIA_BARK).put(Blocks.ACACIA_LOG, RootsRegistry.ACACIA_BARK)
@@ -42,7 +43,7 @@ public class DruidKnifeItem extends Item {
             .put(Blocks.SPRUCE_WOOD, RootsRegistry.SPRUCE_BARK).put(Blocks.SPRUCE_LOG, RootsRegistry.SPRUCE_BARK)
             //			.put(Blocks.WARPED_STEM, Items.STRIPPED_WARPED_STEM).put(Blocks.WARPED_HYPHAE, Items.STRIPPED_WARPED_HYPHAE)
             //			.put(Blocks.CRIMSON_STEM, Items.STRIPPED_CRIMSON_STEM).put(Blocks.CRIMSON_HYPHAE, Items.STRIPPED_CRIMSON_HYPHAE)
-            .build();
+            .build());
 
     public DruidKnifeItem(Properties properties) {
         super(properties);
@@ -79,8 +80,8 @@ public class DruidKnifeItem extends Item {
 
     public static ItemStack getBarkDrop(BlockState originalState) {
         Block block = originalState.getBlock();
-        if (BLOCK_BARK_MAP.containsKey(block)) {
-            return new ItemStack(BLOCK_BARK_MAP.get(block).get());
+        if (BLOCK_BARK_MAP.get().containsKey(block)) {
+            return new ItemStack(BLOCK_BARK_MAP.get().get(block));
         } else {
             return ItemStack.EMPTY;
         }

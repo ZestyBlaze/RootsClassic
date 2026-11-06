@@ -1,6 +1,7 @@
 package elucent.rootsclassic.component.components;
 
 import elucent.rootsclassic.Const;
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.component.ComponentBase;
 import elucent.rootsclassic.component.EnumCastType;
 import elucent.rootsclassic.config.RootsConfig;
@@ -39,7 +40,7 @@ public class ComponentRose extends ComponentBase {
                     //            }
                     target.hurt(spellAttack(caster), (int) (9 + 2 * potency));
                     RootsUtil.addTickTracking(target);
-                    target.getExtraCustomData().putFloat("RMOD_thornsDamage", 2.0f + (float) potency);
+                    target.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().putFloat("RMOD_thornsDamage", 2.0f + (float) potency);
                     if (caster instanceof Player player) {
                         target.setLastHurtByPlayer(player);
                     } else {

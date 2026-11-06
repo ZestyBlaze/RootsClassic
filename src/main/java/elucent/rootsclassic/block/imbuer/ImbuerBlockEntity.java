@@ -8,79 +8,74 @@ import elucent.rootsclassic.component.ComponentBaseRegistry;
 import elucent.rootsclassic.item.StaffItem;
 import elucent.rootsclassic.item.powder.SpellPowderItem;
 import elucent.rootsclassic.registry.RootsRegistry;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import me.alphamode.forgetags.Tags;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 
 public class ImbuerBlockEntity extends BEBase {
     private static final int STICK = 0;
     private static final int DUST = 1;
     public int progress = 0;
     public int spin = 0;
-    public final ItemStackHandler inventory = new ItemStackHandler(2) {
-
+    public final SimpleContainer inventory = new SimpleContainer(2) {
         @Override
-        protected int getStackLimit(int slot, @NotNull ItemVariant stack) {
+        public int getMaxStackSize() {
             return 1;
         }
 
         @Override
-        public boolean isItemValid(int slot, @NotNull ItemVariant stack, long amount) {
-            if (slot == 0) {
-                return stack.toStack().is(Tags.Items.RODS_WOODEN);
+        public boolean canPlaceItem(int index, ItemStack stack) {
+            if (index == 0) {
+                return stack.is(Items.STICK);
             } else {
                 return stack.getItem() instanceof SpellPowderItem;
             }
         }
     };
-    private LazyOptional<ItemStackHandler> inventoryHolder = LazyOptional.of(() -> inventory);
+    private InventoryStorage inventoryHolder = InventoryStorage.of(inventory, null);
 
     public ImbuerBlockEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
     }
 
     public ImbuerBlockEntity(BlockPos pos, BlockState state) {
-        super(RootsRegistry.IMBUER_TILE.get(), pos, state);
+        super(RootsRegistry.IMBUER_TILE, pos, state);
     }
 
     public ItemStack getStick() {
-        return inventory.getStackInSlot(STICK);
+        return inventory.getItem(STICK);
     }
 
     public ItemStack getSpellPowder() {
-        return inventory.getStackInSlot(DUST);
+        return inventory.getItem(DUST);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        inventory.deserializeNBT(tag.getCompound("InventoryHandler"));
     }
 
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("InventoryHandler", inventory.serializeNBT());
     }
 
     @Override
     public void breakBlock(Level levelAccessor, BlockPos pos, BlockState state, Player player) {
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
+        for (int i = 0; i < inventoryHolder.getSlots().size(); i++) {
+            ItemStack stack = inventory.getItem(i);
             if (!stack.isEmpty() && !levelAccessor.isClientSide) {
                 levelAccessor.addFreshEntity(new ItemEntity(levelAccessor, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
             }
@@ -96,7 +91,7 @@ public class ImbuerBlockEntity extends BEBase {
                     if (!levelAccessor.isClientSide) {
                         levelAccessor.addFreshEntity(new ItemEntity(levelAccessor, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, getStick()));
                     }
-                    inventory.setStackInSlot(STICK, ItemStack.EMPTY);
+                    inventory.setItem(STICK, ItemStack.EMPTY);
                     setChanged();
                     levelAccessor.sendBlockUpdated(getBlockPos(), state, levelAccessor.getBlockState(pos), 3);
                     return InteractionResult.SUCCESS;
@@ -104,26 +99,26 @@ public class ImbuerBlockEntity extends BEBase {
                     if (!levelAccessor.isClientSide) {
                         levelAccessor.addFreshEntity(new ItemEntity(levelAccessor, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, getSpellPowder()));
                     }
-                    inventory.setStackInSlot(DUST, ItemStack.EMPTY);
+                    inventory.setItem(DUST, ItemStack.EMPTY);
                     setChanged();
                     levelAccessor.sendBlockUpdated(getBlockPos(), state, levelAccessor.getBlockState(pos), 3);
                     return InteractionResult.SUCCESS;
                 }
-            } else if (heldItem.is(Tags.Items.RODS_WOODEN)) {
+            } else if (heldItem.is(Items.STICK)) {
                 if (getStick().isEmpty()) {
                     ItemStack copyStack = heldItem.copy();
                     copyStack.setCount(1);
-                    inventory.setStackInSlot(STICK, copyStack);
+                    inventory.setItem(STICK, copyStack);
                     heldItem.shrink(1);
                     setChanged();
                     levelAccessor.sendBlockUpdated(getBlockPos(), state, levelAccessor.getBlockState(pos), 3);
                     return InteractionResult.SUCCESS;
                 }
-            } else if (heldItem.getItem() == RootsRegistry.SPELL_POWDER.get()) {
+            } else if (heldItem.getItem() == RootsRegistry.SPELL_POWDER) {
                 if (getSpellPowder().isEmpty()) {
                     ItemStack copyStack = heldItem.copy();
                     copyStack.setCount(1);
-                    inventory.setStackInSlot(DUST, copyStack);
+                    inventory.setItem(DUST, copyStack);
                     heldItem.shrink(1);
                     setChanged();
                     levelAccessor.sendBlockUpdated(getBlockPos(), state, levelAccessor.getBlockState(pos), 3);
@@ -150,7 +145,7 @@ public class ImbuerBlockEntity extends BEBase {
                 tile.progress = 0;
                 if (!dustStack.isEmpty() && !stickStack.isEmpty()) {
                     if (dustStack.hasTag()) {
-                        ItemStack staff = new ItemStack(RootsRegistry.STAFF.get(), 1);
+                        ItemStack staff = new ItemStack(RootsRegistry.STAFF, 1);
                         CompoundTag tag = dustStack.getTag();
                         String effectName = tag.getString(Const.NBT_EFFECT);
                         int potency = tag.getInt(Const.NBT_POTENCY);
@@ -160,8 +155,8 @@ public class ImbuerBlockEntity extends BEBase {
                         if (!level.isClientSide) {
                             level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, staff));
                         }
-                        tile.inventory.setStackInSlot(STICK, ItemStack.EMPTY);
-                        tile.inventory.setStackInSlot(DUST, ItemStack.EMPTY);
+                        tile.inventory.setItem(STICK, ItemStack.EMPTY);
+                        tile.inventory.setItem(DUST, ItemStack.EMPTY);
                         tile.setChanged();
                         level.sendBlockUpdated(pos, state, state, 3);
                     }
@@ -242,11 +237,5 @@ public class ImbuerBlockEntity extends BEBase {
                 tile.progress = 0;
             }
         }
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        inventoryHolder.invalidate();
     }
 }

@@ -56,7 +56,8 @@
   ],
   "custom": {
     "cardinal-components": [
-      "rootsclassic:manacapability"
+      "rootsclassic:manacapability",
+      "rootsclassic:entitycapability"
     ]
   },
   "accessWidener": "rootsclassic.accessWidener"

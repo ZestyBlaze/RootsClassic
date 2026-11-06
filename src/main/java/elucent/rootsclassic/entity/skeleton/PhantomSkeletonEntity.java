@@ -1,7 +1,6 @@
 package elucent.rootsclassic.entity.skeleton;
 
 import elucent.rootsclassic.registry.RootsEntities;
-import io.github.fabricators_of_create.porting_lib.fake_players.FakePlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,7 +35,7 @@ public class PhantomSkeletonEntity extends Skeleton {
     }
 
     public PhantomSkeletonEntity(Level levelAccessor) {
-        super(RootsEntities.PHANTOM_SKELETON.get(), levelAccessor);
+        super(RootsEntities.PHANTOM_SKELETON, levelAccessor);
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
@@ -92,7 +91,9 @@ public class PhantomSkeletonEntity extends Skeleton {
 
     @Override
     public boolean doHurtTarget(Entity entityIn) {
-        if (appliesSlowPotion && entityIn instanceof Player player && !(entityIn instanceof FakePlayer)) {
+        if (appliesSlowPotion && entityIn instanceof Player player
+                //&& !(entityIn instanceof FakePlayer)
+        ) {
             if (!player.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10 * 20, 0)); // is 10seconds
             }

@@ -1,6 +1,7 @@
 package elucent.rootsclassic.component.components;
 
 import elucent.rootsclassic.Const;
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.component.ComponentBase;
 import elucent.rootsclassic.component.EnumCastType;
 import elucent.rootsclassic.registry.RootsRegistry;
@@ -15,7 +16,7 @@ import java.util.List;
 public class ComponentMidnightBloom extends ComponentBase {
 
     public ComponentMidnightBloom() {
-        super(RootsRegistry.MIDNIGHT_BLOOM.get(), 36);
+        super(RootsRegistry.MIDNIGHT_BLOOM, 36);
     }
 
     @Override
@@ -25,7 +26,7 @@ public class ComponentMidnightBloom extends ComponentBase {
                     new AABB(x - size * 6.0, y - size * 6.0, z - size * 6.0, x + size * 6.0, y + size * 6.0, z + size * 6.0));
             targets.removeIf(target -> target.getUUID() == caster.getUUID());
             for (LivingEntity target : targets) {
-                CompoundTag persistentData = target.getExtraCustomData();
+                CompoundTag persistentData = target.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData();
                 persistentData.putBoolean(Const.NBT_TRACK_TICKS, false);
                 persistentData.putInt(Const.NBT_SKIP_TICKS, 40 + 40 * (int) potency);
             }

@@ -3,6 +3,7 @@ package elucent.rootsclassic.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import elucent.rootsclassic.Const;
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.client.ClientInfo;
 import elucent.rootsclassic.config.RootsConfig;
 import elucent.rootsclassic.research.ResearchBase;
@@ -57,7 +58,7 @@ public class TabletScreen extends Screen {
             }
         }
         if (group != null && base != null) {
-            CompoundTag persistentData = player.getExtraCustomData();
+            CompoundTag persistentData = player.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData();
             persistentData.putString("RMOD_researchGroup", group.getName());
             persistentData.putString("RMOD_researchBase", base.getName());
             ResearchBase tempResearch = ResearchManager.getResearch(persistentData.getString("RMOD_researchGroup"), persistentData.getString("RMOD_researchBase"));

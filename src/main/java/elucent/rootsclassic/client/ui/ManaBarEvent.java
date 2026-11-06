@@ -9,8 +9,8 @@ import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.client.ClientInfo;
 import elucent.rootsclassic.config.RootsConfig;
 import elucent.rootsclassic.item.IManaRelatedItem;
-import io.github.fabricators_of_create.porting_lib.event.client.OverlayRenderCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Player;
@@ -26,17 +26,15 @@ public class ManaBarEvent {
     }
 
     public static void onGameOverlayRender() {
-        OverlayRenderCallback.EVENT.register((poseStack, v, window, types) -> {
+        HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> {
             Player player = Minecraft.getInstance().player;
             boolean showBar = player.getMainHandItem().getItem() instanceof IManaRelatedItem || player.getOffhandItem().getItem() instanceof IManaRelatedItem;
             IManaCapability capability = RootsCapabilityManager.MANA_CAPABILITY.maybeGet(player).orElse(null);
-            if(!showBar || capability == null) {
-                return false;
+            if (showBar && capability != null) {
+                if (capability.getMaxMana() > 0) {
+                    drawManaBar(player, capability, matrixStack, Minecraft.getInstance().getWindow());
+                }
             }
-            if(capability.getMaxMana() > 0) {
-                drawManaBar(player, capability, poseStack, window);
-            }
-            return false;
         });
     }
 

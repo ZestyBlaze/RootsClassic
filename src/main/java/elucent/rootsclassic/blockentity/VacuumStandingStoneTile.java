@@ -21,7 +21,7 @@ public class VacuumStandingStoneTile extends BEBase {
     }
 
     public VacuumStandingStoneTile(BlockPos pos, BlockState state) {
-        this(RootsRegistry.VACUUM_STANDING_STONE_TILE.get(), pos, state);
+        this(RootsRegistry.VACUUM_STANDING_STONE_TILE, pos, state);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class VacuumStandingStoneTile extends BEBase {
         List<ItemEntity> nearbyItems = level.getEntitiesOfClass(ItemEntity.class, new AABB(
                 pos.getX() - range, pos.getY() - range, pos.getZ() - range,
                 pos.getX() + range, pos.getY() + range, pos.getZ() + range));
-        if (nearbyItems.size() > 0) {
+        if (!nearbyItems.isEmpty()) {
             for (ItemEntity nearbyItem : nearbyItems) {
                 if (nearbyItem.getItem().isEmpty() || !nearbyItem.isAlive()) {
                     continue;

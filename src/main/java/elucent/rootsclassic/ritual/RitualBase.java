@@ -42,21 +42,21 @@ public abstract class RitualBase {
         //level 0 has no stones
         if (level >= 1) {
             //the first circle of tier 1 stones
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), -3, 0, -3);
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), -3, 0, 3);
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), 3, 0, -3);
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), 3, 0, 3);
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), 3, 0, 0);
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), -3, 0, 0);
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), 0, 0, 3);
-            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE.get(), 0, 0, -3);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, -3, 0, -3);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, -3, 0, 3);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, 3, 0, -3);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, 3, 0, 3);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, 3, 0, 0);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, -3, 0, 0);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, 0, 0, 3);
+            this.addRitualPillar(RootsRegistry.MUNDANE_STANDING_STONE, 0, 0, -3);
         }
         if (level == 2) {
             //the outer tier 2 stones
-            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE.get(), 5, 1, 0);
-            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE.get(), -5, 1, 0);
-            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE.get(), 0, 1, 5);
-            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE.get(), 0, 1, -5);
+            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE, 5, 1, 0);
+            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE, -5, 1, 0);
+            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE, 0, 1, 5);
+            this.addRitualPillar(RootsRegistry.ATTUNED_STANDING_STONE, 0, 1, -5);
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class RitualBase {
         BlockEntity tileHere;
         for (int i = -1 * RADIUS; i <= RADIUS; i++) {
             for (int j = -1 * RADIUS; j <= RADIUS; j++) {
-                if (levelAccessor.getBlockState(pos.offset(i, 0, j)).getBlock() == RootsRegistry.BRAZIER.get()) {
+                if (levelAccessor.getBlockState(pos.offset(i, 0, j)).getBlock() == RootsRegistry.BRAZIER) {
                     tileHere = levelAccessor.getBlockEntity(pos.offset(i, 0, j));
                     if (tileHere instanceof BrazierBlockEntity) {
                         links.add((BrazierBlockEntity) tileHere);

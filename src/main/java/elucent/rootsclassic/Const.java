@@ -3,7 +3,6 @@ package elucent.rootsclassic;
 import net.minecraft.resources.ResourceLocation;
 
 public class Const {
-
     public static final String MODID = "rootsclassic";
     public static final ResourceLocation tabletSmelting = new ResourceLocation(MODID, "textures/gui/tabletsmelting.png");
     public static ResourceLocation tabletCrafting = new ResourceLocation(MODID, "textures/gui/tabletcrafting.png");

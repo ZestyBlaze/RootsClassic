@@ -5,16 +5,16 @@ import elucent.rootsclassic.recipe.ComponentRecipe;
 import elucent.rootsclassic.registry.RootsRecipes;
 import elucent.rootsclassic.registry.RootsRegistry;
 import elucent.rootsclassic.util.InventoryUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,42 +23,40 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 
 public class MortarBlockEntity extends BEBase {
-    public final ItemStackHandler inventory = new ItemStackHandler(8) {
-
+    public final SimpleContainer inventory = new SimpleContainer(8) {
         @Override
-        protected int getStackLimit(int slot, @NotNull ItemVariant stack) {
+        public int getMaxStackSize() {
             return 1;
         }
 
         @Override
-        protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
+        public void setChanged() {
+            super.setChanged();
             calculateRotations();
         }
     };
-    private LazyOptional<ItemStackHandler> inventoryHolder = LazyOptional.of(() -> inventory);
+    public final InventoryStorage inventoryWrapper = InventoryStorage.of(inventory, null);
 
     public MortarBlockEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
     }
 
     public MortarBlockEntity(BlockPos pos, BlockState state) {
-        this(RootsRegistry.MORTAR_TILE.get(), pos, state);
+        this(RootsRegistry.MORTAR_TILE, pos, state);
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        inventory.deserializeNBT(nbt.getCompound("InventoryHandler"));
+        inventory.fromTag(nbt.getList("InventoryHandler", Tag.TAG_COMPOUND));
     }
 
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("InventoryHandler", inventory.serializeNBT());
+        tag.put("InventoryHandler", inventory.createTag());
     }
 
     @Override
@@ -72,7 +70,7 @@ public class MortarBlockEntity extends BEBase {
         if (hand == InteractionHand.MAIN_HAND) {
             if (heldItem.isEmpty()) {
                 return tryDropSingleItem(levelAccessor, pos, state);
-            } else if (heldItem.getItem() == RootsRegistry.PESTLE.get()) {
+            } else if (heldItem.getItem() == RootsRegistry.PESTLE) {
                 return tryActivateRecipe(player, state);
             } else {
                 return tryInsertItem(levelAccessor, pos, state, heldItem);
@@ -88,52 +86,25 @@ public class MortarBlockEntity extends BEBase {
             if (heldItem.getItem() == Items.GLOWSTONE_DUST || heldItem.getItem() == Items.REDSTONE || heldItem.getItem() == Items.GUNPOWDER) {
                 int maxCapacity = ComponentRecipe.getModifierCapacity(InventoryUtil.createIInventory(inventory));
                 int modifierCount = ComponentRecipe.getModifierCount(InventoryUtil.createIInventory(inventory));
-                /*
-                if (modifierCount < maxCapacity) {
-                    ItemStack restStack = ItemHandlerHelper.insertItem(inventory, heldCopy, false);
-                    if (restStack.isEmpty()) {
-                        heldItem.shrink(1);
-                        setChanged();
-                        levelAccessor.sendBlockUpdated(getBlockPos(), state, levelAccessor.getBlockState(pos), 3);
-                        return InteractionResult.SUCCESS;
-                    } else {
-                        return InteractionResult.FAIL;
-                    }
-                }
-
-                 */
 
                 if(modifierCount < maxCapacity) {
                     if(heldItem.isEmpty()) {
                         return InteractionResult.PASS;
                     }
-                    try (Transaction t = TransferUtil.getTransaction()) {
-                        long inserted = inventory.insert(ItemVariant.of(heldItem), 1, t);
+                    try (Transaction transaction = Transaction.openOuter()) {
+                        long inserted = inventoryWrapper.insert(ItemVariant.of(heldItem), 1, transaction);
                         if (inserted == 1) {
                             heldItem.shrink(1);
                             setChanged();
                             levelAccessor.sendBlockUpdated(pos, state, levelAccessor.getBlockState(pos), 3);
-                            t.commit();
+                            transaction.commit();
                         }
                         return InteractionResult.SUCCESS;
                     }
                 }
             } else {
-                /*
-                ItemStack restStack = ItemHandlerHelper.insertItem(inventory, heldCopy, false);
-                if (restStack.isEmpty()) {
-                    heldItem.shrink(1);
-                    setChanged();
-                    levelAccessor.sendBlockUpdated(getBlockPos(), state, levelAccessor.getBlockState(pos), 3);
-                    return InteractionResult.SUCCESS;
-                } else {
-                    return InteractionResult.FAIL;
-                }
-
-                 */
-
-                try (Transaction t = TransferUtil.getTransaction()) {
-                    long inserted = inventory.insert(ItemVariant.of(heldItem), 1, t);
+                try (Transaction t = Transaction.openOuter()) {
+                    long inserted = inventoryWrapper.insert(ItemVariant.of(heldItem), 1, t);
                     if (inserted == 1) {
                         heldItem.shrink(1);
                         setChanged();
@@ -164,7 +135,7 @@ public class MortarBlockEntity extends BEBase {
     }
 
     private InteractionResult tryActivateRecipe(Player player, BlockState state) {
-        ComponentRecipe recipe = level.getRecipeManager().getRecipeFor(RootsRecipes.COMPONENT_RECIPE_TYPE.get(), InventoryUtil.createIInventory(inventory), level).orElse(null);
+        ComponentRecipe recipe = level.getRecipeManager().getRecipeFor(RootsRecipes.COMPONENT_RECIPE_TYPE, InventoryUtil.createIInventory(inventory), level).orElse(null);
         if (recipe == null) {
             player.displayClientMessage(Component.translatable("rootsclassic.mortar.invalid"), true);
             return InteractionResult.PASS;
@@ -183,7 +154,7 @@ public class MortarBlockEntity extends BEBase {
 
     public void dropItem(ItemStack stack, float offsetY) {
         ItemStack copyStack = stack.copy();
-        if (copyStack.isEmpty() || level.isClientSide) {
+        if (level.isClientSide) {
             return;
         } else {
             BlockPos pos = getBlockPos();
@@ -194,23 +165,17 @@ public class MortarBlockEntity extends BEBase {
     }
 
     private void dropAllItems(Level levelAccessor, BlockPos pos) {
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
             dropItem(stack, 0F);
         }
     }
 
     private void calculateRotations() {
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
             if (!stack.isEmpty()) {
             }
         }
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        inventoryHolder.invalidate();
     }
 }

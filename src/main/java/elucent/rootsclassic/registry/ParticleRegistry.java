@@ -3,16 +3,22 @@ package elucent.rootsclassic.registry;
 import elucent.rootsclassic.Const;
 import elucent.rootsclassic.client.particles.factory.MagicParticleType;
 import elucent.rootsclassic.client.particles.factory.MagicParticleTypeData;
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
 
 public class ParticleRegistry {
-    public static final LazyRegistrar<ParticleType<?>> PARTICLE_TYPES = LazyRegistrar.create(Registry.PARTICLE_TYPE, Const.MODID);
-    public static final RegistryObject<ParticleType<MagicParticleTypeData>> MAGIC_TYPE = PARTICLE_TYPES.register("magic", MagicParticleType::new);
-    public static final RegistryObject<ParticleType<MagicParticleTypeData>> MAGIC_AURA_TYPE = PARTICLE_TYPES.register("magic_aura", MagicParticleType::new);
-    public static final RegistryObject<ParticleType<MagicParticleTypeData>> MAGIC_ALTAR_TYPE = PARTICLE_TYPES.register("magic_altar", MagicParticleType::new);
-    public static final RegistryObject<ParticleType<MagicParticleTypeData>> MAGIC_ALTAR_LINE_TYPE = PARTICLE_TYPES.register("magic_altar_line", MagicParticleType::new);
-    public static final RegistryObject<ParticleType<MagicParticleTypeData>> MAGIC_LINE_TYPE = PARTICLE_TYPES.register("magic_line", MagicParticleType::new);
+    public static final ParticleType<MagicParticleTypeData> MAGIC_TYPE = new MagicParticleType();
+    public static final ParticleType<MagicParticleTypeData> MAGIC_AURA_TYPE = new MagicParticleType();
+    public static final ParticleType<MagicParticleTypeData> MAGIC_ALTAR_TYPE = new MagicParticleType();
+    public static final ParticleType<MagicParticleTypeData> MAGIC_ALTAR_LINE_TYPE = new MagicParticleType();
+    public static final ParticleType<MagicParticleTypeData> MAGIC_LINE_TYPE = new MagicParticleType();
+
+    public static void register() {
+        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(Const.MODID, "magic"), MAGIC_TYPE);
+        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(Const.MODID, "magic_aura"), MAGIC_AURA_TYPE);
+        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(Const.MODID, "magic_altar"), MAGIC_ALTAR_TYPE);
+        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(Const.MODID, "magic_altar_line"), MAGIC_ALTAR_LINE_TYPE);
+        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(Const.MODID, "magic_line"), MAGIC_LINE_TYPE);
+    }
 }

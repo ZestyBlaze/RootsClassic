@@ -25,7 +25,7 @@ public class MortarCategory implements DisplayCategory<MortarDisplay> {
     private final Component localizedName;
 
     public MortarCategory() {
-        this.icon = EntryStacks.of(RootsRegistry.MORTAR.get());
+        this.icon = EntryStacks.of(RootsRegistry.MORTAR);
         this.localizedName = Component.translatable("rootsclassic.gui.jei.category.mortar");
     }
 

@@ -9,9 +9,7 @@ import elucent.rootsclassic.ritual.RitualBase;
 import elucent.rootsclassic.ritual.RitualBaseRegistry;
 import elucent.rootsclassic.ritual.RitualRegistry;
 import elucent.rootsclassic.util.InventoryUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
@@ -21,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,26 +39,26 @@ public class AltarBlockEntity extends BEBase {
     private ResourceLocation ritualName = null;
     private RitualBase ritualCurrent = null;
     //	private ItemStack resultItem = ItemStack.EMPTY; TODO: Unused
-    public final ItemStackHandler inventory = new ItemStackHandler(3) {
+
+    public final SimpleContainer inventory = new SimpleContainer(3) {
         @Override
-        protected int getStackLimit(int slot, @NotNull ItemVariant stack) {
+        public int getMaxStackSize() {
             return 1;
         }
     };
-    private LazyOptional<ItemStackHandler> inventoryHolder = LazyOptional.of(() -> inventory);
+    public final InventoryStorage inventoryWrapper = InventoryStorage.of(inventory, null);
 
     public AltarBlockEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
     }
 
     public AltarBlockEntity(BlockPos pos, BlockState state) {
-        super(RootsRegistry.ALTAR_TILE.get(), pos, state);
+        super(RootsRegistry.ALTAR_TILE, pos, state);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        inventory.deserializeNBT(tag.getCompound("InventoryHandler"));
         setIncenses(new ArrayList<>());
         if (tag.contains("incenses")) {
             ListTag list = tag.getList("incenses", CompoundTag.TAG_COMPOUND);
@@ -80,8 +78,7 @@ public class AltarBlockEntity extends BEBase {
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("InventoryHandler", inventory.serializeNBT());
-        if (getIncenses().size() > 0) {
+        if (!getIncenses().isEmpty()) {
             ListTag list = new ListTag();
             for (int i = 0; i < getIncenses().size(); i++) {
                 //  ;
@@ -99,9 +96,9 @@ public class AltarBlockEntity extends BEBase {
 
     @Override
     public void breakBlock(Level levelAccessor, BlockPos pos, BlockState state, Player player) {
-        for (int i = 0; i < inventory.getSlots(); i++) {
+        for (int i = 0; i < inventoryWrapper.getSlots().size(); i++) {
             if (!levelAccessor.isClientSide) {
-                ItemStack slotStack = inventory.getStackInSlot(i);
+                ItemStack slotStack = inventoryWrapper.getSlot(i).getResource().toStack();
                 if (!slotStack.isEmpty()) {
                     levelAccessor.addFreshEntity(new ItemEntity(levelAccessor, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, slotStack));
                 }
@@ -115,7 +112,7 @@ public class AltarBlockEntity extends BEBase {
         if (hand == InteractionHand.MAIN_HAND) {
             if (heldItem.isEmpty() && !player.isShiftKeyDown() && this.getProgress() == 0) {
                 //try to withdraw an item
-                if (inventory.getSlots() > 0) {
+                if (!inventoryWrapper.getSlots().isEmpty()) {
                     ItemStack lastStack = InventoryUtil.getLastStack(inventory);
                     if (!lastStack.isEmpty()) {
                         if (!levelAccessor.isClientSide) {
@@ -187,8 +184,8 @@ public class AltarBlockEntity extends BEBase {
                 //try to insert an item into the altar
                 if (getProgress() != 0 || heldItem.isEmpty())
                     return InteractionResult.PASS;
-                try (Transaction t = TransferUtil.getTransaction()) {
-                    long inserted = inventory.insert(ItemVariant.of(heldItem), 1, t);
+                try (Transaction t = Transaction.openOuter()) {
+                    long inserted = inventoryWrapper.insert(ItemVariant.of(heldItem), 1, t);
                     if (inserted == 1) {
                         heldItem.shrink(1);
                         setChanged();
@@ -236,7 +233,7 @@ public class AltarBlockEntity extends BEBase {
     public static void clientTick(Level level, BlockPos pos, BlockState state, AltarBlockEntity tile) {
         if (tile.getProgress() > 0 && tile.getRitualCurrent() != null) {
             tile.setProgress(tile.getProgress() - 1);
-            if (tile.getRitualCurrent().getPositionsRelative().size() > 0) {
+            if (!tile.getRitualCurrent().getPositionsRelative().isEmpty()) {
                 BlockPos particlePos = tile.getRitualCurrent().getPositionsRelative().get(level.random.nextInt(tile.getRitualCurrent().getPositionsRelative().size())).above()
                         .offset(pos.getX(), pos.getY(), pos.getZ());
                 if (level.random.nextInt(6) == 0) {
@@ -340,8 +337,8 @@ public class AltarBlockEntity extends BEBase {
     }
 
     public void emptyAltar() {
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            inventory.setStackInSlot(i, ItemStack.EMPTY);
+        for (int i = 0; i < inventoryWrapper.getSlots().size(); i++) {
+            inventory.setItem(i, ItemStack.EMPTY);
         }
     }
 
@@ -355,10 +352,4 @@ public class AltarBlockEntity extends BEBase {
     //		}
     //		this.resultItem = resultItem;
     //	}
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        this.inventoryHolder.invalidate();
-    }
 }

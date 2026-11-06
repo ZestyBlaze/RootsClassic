@@ -47,7 +47,7 @@ public class AltarBlock extends BaseBEBlock implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return createStandingStoneTicker(level, entityType, RootsRegistry.ALTAR_TILE.get());
+        return createStandingStoneTicker(level, entityType, RootsRegistry.ALTAR_TILE);
     }
 
     @Nullable

@@ -18,7 +18,7 @@ import java.util.List;
 public class MutagenRadiantDaisyRecipe extends MutagenRecipe {
 
     public MutagenRadiantDaisyRecipe() {
-        super(new ResourceLocation(Const.MODID, "radiant_daisy"), Blocks.OXEYE_DAISY.defaultBlockState(), RootsRegistry.RADIANT_DAISY.get().defaultBlockState());
+        super(new ResourceLocation(Const.MODID, "radiant_daisy"), Blocks.OXEYE_DAISY.defaultBlockState(), RootsRegistry.RADIANT_DAISY.defaultBlockState());
         addIngredient(new ItemStack(Blocks.GLOWSTONE, 1));
         addIngredient(new ItemStack(Items.PRISMARINE_CRYSTALS, 1));
     }

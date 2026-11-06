@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 public class ComponentFlareOrchid extends ComponentBase {
 
     public ComponentFlareOrchid() {
-        super(RootsRegistry.FLARE_ORCHID.get(), 36);
+        super(RootsRegistry.FLARE_ORCHID, 36);
     }
 
     @Override

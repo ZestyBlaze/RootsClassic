@@ -1,6 +1,7 @@
 package elucent.rootsclassic.component.components;
 
 import elucent.rootsclassic.Const;
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.component.ComponentBase;
 import elucent.rootsclassic.component.EnumCastType;
 import elucent.rootsclassic.config.RootsConfig;
@@ -34,8 +35,8 @@ public class ComponentAllium extends ComponentBase {
                     //            damageDealt += (int) (4 + 2 * potency);
                     target.hurt(spellAttack(caster), (int) (5 + 2 * potency));
                     target.setLastHurtMob(caster);
-                    target.setLastHurtByMob((LivingEntity) caster);
-                    target.getExtraCustomData().putDouble("RMOD_vuln", 1.0 + 0.5 * potency);
+                    target.setLastHurtByMob(caster);
+                    target.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().putDouble("RMOD_vuln", 1.0 + 0.5 * potency);
                 }
             }
         }

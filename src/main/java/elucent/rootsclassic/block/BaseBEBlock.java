@@ -15,7 +15,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class BaseBEBlock extends Block {
-
     public BaseBEBlock(Properties properties) {
         super(properties);
     }

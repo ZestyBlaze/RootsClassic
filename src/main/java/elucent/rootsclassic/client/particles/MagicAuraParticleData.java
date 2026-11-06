@@ -21,10 +21,10 @@ public class MagicAuraParticleData implements ParticleProvider<MagicParticleType
     }
 
     public static ParticleOptions createData(ParticleColor color) {
-        return new MagicParticleTypeData(ParticleRegistry.MAGIC_AURA_TYPE.get(), color);
+        return new MagicParticleTypeData(ParticleRegistry.MAGIC_AURA_TYPE, color);
     }
 
     public static ParticleOptions createData(double r, double g, double b) {
-        return new MagicParticleTypeData(ParticleRegistry.MAGIC_AURA_TYPE.get(), new ParticleColor(r, g, b));
+        return new MagicParticleTypeData(ParticleRegistry.MAGIC_AURA_TYPE, new ParticleColor(r, g, b));
     }
 }

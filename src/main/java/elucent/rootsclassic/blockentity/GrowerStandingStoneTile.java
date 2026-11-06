@@ -25,7 +25,7 @@ public class GrowerStandingStoneTile extends BEBase {
     }
 
     public GrowerStandingStoneTile(BlockPos pos, BlockState state) {
-        this(RootsRegistry.GROWER_STANDING_STONE_TILE.get(), pos, state);
+        this(RootsRegistry.GROWER_STANDING_STONE_TILE, pos, state);
     }
 
     @Override

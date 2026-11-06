@@ -1,23 +1,23 @@
 package elucent.rootsclassic.util;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 
 public class InventoryUtil {
-    public static int getFirstEmptyStack(ItemStackHandler itemHandler) {
+    public static int getFirstEmptyStack(Container itemHandler) {
         if (itemHandler == null) return -1;
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
+        for (int i = 0; i < itemHandler.getContainerSize(); i++) {
+            if (itemHandler.getItem(i).isEmpty()) {
                 return i;
             }
         }
         return -1;
     }
 
-    public static boolean isFull(ItemStackHandler itemHandler) {
+    public static boolean isFull(Container itemHandler) {
         if (itemHandler == null) return true;
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            ItemStack stack = itemHandler.getStackInSlot(i);
+        for (int i = 0; i < itemHandler.getContainerSize(); i++) {
+            ItemStack stack = itemHandler.getItem(i);
             if (stack.isEmpty() || (stack.getCount() < stack.getMaxStackSize())) {
                 return false;
             }
@@ -25,10 +25,10 @@ public class InventoryUtil {
         return true;
     }
 
-    public static boolean isEmpty(ItemStackHandler itemHandler) {
+    public static boolean isEmpty(Container itemHandler) {
         if (itemHandler == null) return true;
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            ItemStack stack = itemHandler.getStackInSlot(i);
+        for (int i = 0; i < itemHandler.getContainerSize(); i++) {
+            ItemStack stack = itemHandler.getItem(i);
             if (!stack.isEmpty()) {
                 return false;
             }
@@ -36,20 +36,20 @@ public class InventoryUtil {
         return true;
     }
 
-    public static void clearInventory(ItemStackHandler itemHandler) {
+    public static void clearInventory(Container itemHandler) {
         if (itemHandler == null) return;
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            ItemStack stack = itemHandler.getStackInSlot(i);
+        for (int i = 0; i < itemHandler.getContainerSize(); i++) {
+            ItemStack stack = itemHandler.getItem(i);
             if (!stack.isEmpty()) {
                 stack.shrink(1);
             }
         }
     }
 
-    public static ItemStack getLastStack(ItemStackHandler itemHandler) {
+    public static ItemStack getLastStack(Container itemHandler) {
         if (itemHandler == null) return ItemStack.EMPTY;
-        for (int i = itemHandler.getSlots() - 1; i >= 0; i--) {
-            ItemStack stack = itemHandler.getStackInSlot(i);
+        for (int i = itemHandler.getContainerSize() - 1; i >= 0; i--) {
+            ItemStack stack = itemHandler.getItem(i);
             if (!stack.isEmpty()) {
                 return stack;
             }
@@ -57,11 +57,11 @@ public class InventoryUtil {
         return ItemStack.EMPTY;
     }
 
-    public static CustomInventory createIInventory(ItemStackHandler itemHandler) {
+    public static CustomInventory createIInventory(Container itemHandler) {
         if (itemHandler == null) return null;
-        CustomInventory inventory = new CustomInventory(itemHandler.getSlots());
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
+        CustomInventory inventory = new CustomInventory(itemHandler.getContainerSize());
+        for (int i = 0; i < itemHandler.getContainerSize(); i++) {
+            inventory.setItem(i, itemHandler.getItem(i));
         }
         return inventory;
     }

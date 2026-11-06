@@ -1,6 +1,7 @@
 package elucent.rootsclassic.util;
 
 import elucent.rootsclassic.Const;
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -41,17 +42,17 @@ public class RootsUtil {
     }
 
     public static void addTickTracking(Entity entity) {
-        if (entity.getExtraCustomData().contains(Const.NBT_TRACK_TICKS)) {
-            entity.getExtraCustomData().putInt(Const.NBT_TRACK_TICKS, entity.getExtraCustomData().getInt(Const.NBT_TRACK_TICKS) + 1);
+        if (entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().contains(Const.NBT_TRACK_TICKS)) {
+            entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().putInt(Const.NBT_TRACK_TICKS, entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().getInt(Const.NBT_TRACK_TICKS) + 1);
         } else {
-            entity.getExtraCustomData().putInt(Const.NBT_TRACK_TICKS, 1);
+            entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().putInt(Const.NBT_TRACK_TICKS, 1);
         }
     }
 
     public static void decrementTickTracking(Entity entity) {
-        if (entity.getExtraCustomData().contains(Const.NBT_TRACK_TICKS)) {
-            entity.getExtraCustomData().putInt(Const.NBT_TRACK_TICKS, entity.getExtraCustomData().getInt(Const.NBT_TRACK_TICKS) - 1);
-            if (entity.getExtraCustomData().getInt(Const.NBT_TRACK_TICKS) == 0) {
+        if (entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().contains(Const.NBT_TRACK_TICKS)) {
+            entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().putInt(Const.NBT_TRACK_TICKS, entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().getInt(Const.NBT_TRACK_TICKS) - 1);
+            if (entity.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().getInt(Const.NBT_TRACK_TICKS) == 0) {
                 entity.removeTag(Const.NBT_TRACK_TICKS);
             }
         }

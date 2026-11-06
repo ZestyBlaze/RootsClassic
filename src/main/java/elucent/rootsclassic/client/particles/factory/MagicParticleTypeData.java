@@ -39,7 +39,7 @@ public class MagicParticleTypeData implements ParticleOptions {
     }
 
     public MagicParticleTypeData(float r, float g, float b) {
-        this(ParticleRegistry.MAGIC_TYPE.get(), new ParticleColor(r, g, b));
+        this(ParticleRegistry.MAGIC_TYPE, new ParticleColor(r, g, b));
     }
 
     @Override

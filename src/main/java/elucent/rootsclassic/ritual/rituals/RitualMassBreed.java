@@ -1,5 +1,6 @@
 package elucent.rootsclassic.ritual.rituals;
 
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.ritual.RitualBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
@@ -23,7 +24,7 @@ public class RitualMassBreed extends RitualBase {
         if (animals.size() > 0) {
             for (Animal animal : animals) {
                 animal.setInLove(levelAccessor.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false));
-                animal.getExtraCustomData().putInt("InLove", 400);
+                animal.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().putInt("InLove", 400);
             }
         }
     }

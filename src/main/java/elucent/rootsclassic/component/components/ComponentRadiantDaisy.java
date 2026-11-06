@@ -22,7 +22,7 @@ import java.util.List;
 public class ComponentRadiantDaisy extends ComponentBase {
 
     public ComponentRadiantDaisy() {
-        super(RootsRegistry.RADIANT_DAISY.get(), 24);
+        super(RootsRegistry.RADIANT_DAISY, 24);
     }
 
     @Override

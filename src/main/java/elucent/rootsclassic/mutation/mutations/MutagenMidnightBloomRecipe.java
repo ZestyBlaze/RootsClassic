@@ -1,6 +1,7 @@
 package elucent.rootsclassic.mutation.mutations;
 
 import elucent.rootsclassic.Const;
+import elucent.rootsclassic.capability.RootsCapabilityManager;
 import elucent.rootsclassic.mutation.MutagenRecipe;
 import elucent.rootsclassic.registry.RootsRegistry;
 import net.minecraft.core.BlockPos;
@@ -16,13 +17,13 @@ import java.util.List;
 public class MutagenMidnightBloomRecipe extends MutagenRecipe {
 
     public MutagenMidnightBloomRecipe() {
-        super(new ResourceLocation(Const.MODID, "midnight_bloom"), Blocks.POPPY.defaultBlockState(), RootsRegistry.MIDNIGHT_BLOOM.get().defaultBlockState());
+        super(new ResourceLocation(Const.MODID, "midnight_bloom"), Blocks.POPPY.defaultBlockState(), RootsRegistry.MIDNIGHT_BLOOM.defaultBlockState());
         addIngredient(new ItemStack(Blocks.COAL_BLOCK, 1));
     }
 
     @Override
     public void onCrafted(Level levelAccessor, BlockPos pos, Player player) {
-        player.getExtraCustomData().putInt(Const.NBT_SKIP_TICKS, 200);
+        player.getComponent(RootsCapabilityManager.ENTITY_CAPABILITY).getExtraData().putInt(Const.NBT_SKIP_TICKS, 200);
     }
 
     @Override

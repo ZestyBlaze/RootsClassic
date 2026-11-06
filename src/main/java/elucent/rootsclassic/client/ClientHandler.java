@@ -50,22 +50,22 @@ public class ClientHandler {
     private static final ResourceLocation woodTexture = new ResourceLocation(Const.MODID, "textures/models/armor/wildwood.png");
 
     public static void onClientSetup() {
-        ItemProperties.register(RootsRegistry.STAFF.get(), new ResourceLocation("imbued"), ((itemStack, clientLevel, livingEntity, i) ->
+        ItemProperties.register(RootsRegistry.STAFF, new ResourceLocation("imbued"), ((itemStack, clientLevel, livingEntity, i) ->
                 itemStack.getTag() != null && itemStack.getTag().contains(Const.NBT_EFFECT) ? 1.0f : 0.0f)
         );
     }
 
     public static void registerEntityRenders() {
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), RootsRegistry.FLARE_ORCHID.get(), RootsRegistry.MIDNIGHT_BLOOM.get(), RootsRegistry.RADIANT_DAISY.get(), RootsRegistry.ALTAR.get());
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), RootsRegistry.FLARE_ORCHID, RootsRegistry.MIDNIGHT_BLOOM, RootsRegistry.RADIANT_DAISY, RootsRegistry.ALTAR);
 
-        BlockEntityRenderers.register(RootsRegistry.MORTAR_TILE.get(), MortarBER::new);
-        BlockEntityRenderers.register(RootsRegistry.IMBUER_TILE.get(), ImbuerBER::new);
-        BlockEntityRenderers.register(RootsRegistry.ALTAR_TILE.get(), AltarBER::new);
-        BlockEntityRenderers.register(RootsRegistry.BRAZIER_TILE.get(), BrazierBER::new);
+        BlockEntityRenderers.register(RootsRegistry.MORTAR_TILE, MortarBER::new);
+        BlockEntityRenderers.register(RootsRegistry.IMBUER_TILE, ImbuerBER::new);
+        BlockEntityRenderers.register(RootsRegistry.ALTAR_TILE, AltarBER::new);
+        BlockEntityRenderers.register(RootsRegistry.BRAZIER_TILE, BrazierBER::new);
 
-        EntityRendererRegistry.register(RootsEntities.PHANTOM_SKELETON.get(), PhantomSkeletonRenderer::new);
-        EntityRendererRegistry.register(RootsEntities.ENTITY_ACCELERATOR.get(), AcceleratorRenderer::new);
-        EntityRendererRegistry.register(RootsEntities.TILE_ACCELERATOR.get(), AcceleratorRenderer::new);
+        EntityRendererRegistry.register(RootsEntities.PHANTOM_SKELETON, PhantomSkeletonRenderer::new);
+        EntityRendererRegistry.register(RootsEntities.ENTITY_ACCELERATOR, AcceleratorRenderer::new);
+        EntityRendererRegistry.register(RootsEntities.TILE_ACCELERATOR, AcceleratorRenderer::new);
     }
 
     public static void registerLayerDefinitions() {
@@ -81,7 +81,7 @@ public class ClientHandler {
             sylvanHeadModel.setAllVisible(false);
             sylvanHeadModel.head.visible = slot == EquipmentSlot.HEAD;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, sylvanHeadModel, sylvanTexture);
-        }, RootsRegistry.SYLVAN_HOOD.get());
+        }, RootsRegistry.SYLVAN_HOOD);
 
         ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
             if(sylvanChestModel == null) {
@@ -92,7 +92,7 @@ public class ClientHandler {
             sylvanChestModel.setAllVisible(false);
             sylvanChestModel.body.visible = slot == EquipmentSlot.CHEST;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, sylvanChestModel, sylvanTexture);
-        }, RootsRegistry.SYLVAN_ROBE.get());
+        }, RootsRegistry.SYLVAN_ROBE);
 
         ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
             if(sylvanLegModel == null) {
@@ -104,7 +104,7 @@ public class ClientHandler {
             sylvanLegModel.leftLeg.visible = slot == EquipmentSlot.LEGS;
             sylvanLegModel.rightLeg.visible = slot == EquipmentSlot.LEGS;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, sylvanLegModel, sylvanTexture);
-        }, RootsRegistry.SYLVAN_TUNIC.get());
+        }, RootsRegistry.SYLVAN_TUNIC);
 
         ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
             if(sylvanBootModel == null) {
@@ -116,7 +116,7 @@ public class ClientHandler {
             sylvanBootModel.leftFoot.visible = slot == EquipmentSlot.FEET;
             sylvanBootModel.rightFoot.visible = slot == EquipmentSlot.FEET;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, sylvanBootModel, sylvanTexture);
-        }, RootsRegistry.SYLVAN_BOOTS.get());
+        }, RootsRegistry.SYLVAN_BOOTS);
 
         ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
             if(wildHeadModel == null) {
@@ -127,7 +127,7 @@ public class ClientHandler {
             wildHeadModel.setAllVisible(false);
             wildHeadModel.head.visible = slot == EquipmentSlot.HEAD;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, wildHeadModel, woodTexture);
-        }, RootsRegistry.WILDWOOD_MASK.get());
+        }, RootsRegistry.WILDWOOD_MASK);
 
         ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
             if(wildChestModel == null) {
@@ -137,7 +137,7 @@ public class ClientHandler {
             wildChestModel.setAllVisible(false);
             wildChestModel.body.visible = slot == EquipmentSlot.CHEST;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, wildChestModel, woodTexture);
-        }, RootsRegistry.WILDWOOD_PLATE.get());
+        }, RootsRegistry.WILDWOOD_PLATE);
 
         ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
             if(wildLegModel == null) {
@@ -148,7 +148,7 @@ public class ClientHandler {
             wildLegModel.leftLeg.visible = slot == EquipmentSlot.LEGS;
             wildLegModel.rightLeg.visible = slot == EquipmentSlot.LEGS;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, wildLegModel, woodTexture);
-        }, RootsRegistry.WILDWOOD_LEGGINGS.get());
+        }, RootsRegistry.WILDWOOD_LEGGINGS);
 
         ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
             if(wildBootModel == null) {
@@ -159,7 +159,7 @@ public class ClientHandler {
             wildBootModel.leftFoot.visible = slot == EquipmentSlot.FEET;
             wildBootModel.rightFoot.visible = slot == EquipmentSlot.FEET;
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, wildBootModel, woodTexture);
-        }, RootsRegistry.WILDWOOD_BOOTS.get());
+        }, RootsRegistry.WILDWOOD_BOOTS);
     }
 
     public static void registerItemColors() {
@@ -180,7 +180,7 @@ public class ClientHandler {
                 }
             }
             return RootsUtil.intColor(255, 255, 255);
-        }, RootsRegistry.STAFF.get());
+        }, RootsRegistry.STAFF);
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
             if (stack.getItem() instanceof CrystalStaffItem && stack.hasTag()) {
                 String effect = CrystalStaffItem.getEffect(stack);
@@ -200,7 +200,7 @@ public class ClientHandler {
                 }
             }
             return RootsUtil.intColor(255, 255, 255);
-        }, RootsRegistry.CRYSTAL_STAFF.get());
+        }, RootsRegistry.CRYSTAL_STAFF);
     }
 
     public static void registerParticleFactories() {
@@ -208,10 +208,10 @@ public class ClientHandler {
             registry.register(new ResourceLocation(Const.MODID, "particle/magic"));
         });
 
-        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_TYPE.get(), MagicParticleData::new);
-        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_AURA_TYPE.get(), MagicAuraParticleData::new);
-        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_ALTAR_TYPE.get(), MagicAltarParticleData::new);
-        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_ALTAR_LINE_TYPE.get(), MagicAltarLineParticleData::new);
-        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_LINE_TYPE.get(), MagicLineParticleData::new);
+        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_TYPE, MagicParticleData::new);
+        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_AURA_TYPE, MagicAuraParticleData::new);
+        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_ALTAR_TYPE, MagicAltarParticleData::new);
+        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_ALTAR_LINE_TYPE, MagicAltarLineParticleData::new);
+        ParticleFactoryRegistry.getInstance().register(ParticleRegistry.MAGIC_LINE_TYPE, MagicLineParticleData::new);
     }
 }

@@ -9,8 +9,6 @@ import elucent.rootsclassic.component.ComponentBase;
 import elucent.rootsclassic.component.ComponentBaseRegistry;
 import elucent.rootsclassic.component.EnumCastType;
 import elucent.rootsclassic.config.RootsConfig;
-import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
-import io.github.fabricators_of_create.porting_lib.item.UsingTickItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class StaffItem extends Item implements IManaRelatedItem, ReequipAnimationItem, UsingTickItem {
+public class StaffItem extends Item implements IManaRelatedItem {
 
     private static final String NBT_USES = "uses";
     private static final String NBT_MAX = "maxUses";
@@ -132,10 +130,10 @@ public class StaffItem extends Item implements IManaRelatedItem, ReequipAnimatio
     public InteractionResultHolder<ItemStack> use(Level levelAccessor, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (levelAccessor.isClientSide && Minecraft.getInstance().screen != null) {
-            return new InteractionResultHolder<ItemStack>(InteractionResult.FAIL, stack);
+            return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         } else {
             player.startUsingItem(hand);
-            return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, stack);
+            return new InteractionResultHolder<>(InteractionResult.PASS, stack);
         }
     }
 
@@ -153,17 +151,17 @@ public class StaffItem extends Item implements IManaRelatedItem, ReequipAnimatio
     }
 
     @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldS, ItemStack newS, boolean slotChanged) {
-        if (oldS.hasTag() && newS.hasTag()) {
-            if (!oldS.getTag().getString(Const.NBT_EFFECT).equals(newS.getTag().getString(Const.NBT_EFFECT))) {
+    public boolean allowNbtUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
+        if (oldStack.hasTag() && newStack.hasTag()) {
+            if (!oldStack.getTag().getString(Const.NBT_EFFECT).equals(newStack.getTag().getString(Const.NBT_EFFECT))) {
                 return true;
             }
         }
-        return slotChanged;
+        return super.allowNbtUpdateAnimation(player, hand, oldStack, newStack);
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+    public void onUseTick(Level level, LivingEntity player, ItemStack stack, int count) {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag();
             ResourceLocation componentName = ResourceLocation.tryParse(tag.getString(Const.NBT_EFFECT));

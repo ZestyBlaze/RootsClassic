@@ -42,23 +42,23 @@ public class RitualEngravedSword extends RitualBase {
                 ItemStack stack = item.getItem();
                 CompoundTag tag = stack.getTag() != null ? stack.getTag() : new CompoundTag();
                 for (Item i : items) {
-                    if (i == (RootsRegistry.ACACIA_BARK.get()) && mods < 4) {
+                    if (i == (RootsRegistry.ACACIA_BARK) && mods < 4) {
                         addMod(tag, "spikes");
                         mods++;
                     }
-                    if (i == RootsRegistry.SPRUCE_BARK.get() && mods < 4) {
+                    if (i == RootsRegistry.SPRUCE_BARK && mods < 4) {
                         addMod(tag, "forceful");
                         mods++;
                     }
-                    if (i == RootsRegistry.BIRCH_BARK.get() && mods < 4) {
+                    if (i == RootsRegistry.BIRCH_BARK && mods < 4) {
                         addMod(tag, "holy");
                         mods++;
                     }
-                    if (i == RootsRegistry.JUNGLE_BARK.get() && mods < 4) {
+                    if (i == RootsRegistry.JUNGLE_BARK && mods < 4) {
                         addMod(tag, "aquatic");
                         mods++;
                     }
-                    if (i == RootsRegistry.DARK_OAK_BARK.get() && mods < 4) {
+                    if (i == RootsRegistry.DARK_OAK_BARK && mods < 4) {
                         addMod(tag, "shadowstep");
                         mods++;
                     }

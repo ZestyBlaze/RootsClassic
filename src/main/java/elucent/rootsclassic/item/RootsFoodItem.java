@@ -25,13 +25,13 @@ public class RootsFoodItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level levelAccessor, LivingEntity entityLiving) {
         Item item = stack.getItem();
         super.finishUsingItem(stack, levelAccessor, entityLiving);
-        if (item == RootsRegistry.REDCURRANT.get()) {
+        if (item == RootsRegistry.REDCURRANT) {
             entityLiving.heal(HEAL_SMALL);
         }
-        if (item == RootsRegistry.ELDERBERRY.get()) {
+        if (item == RootsRegistry.ELDERBERRY) {
             entityLiving.removeAllEffects();
         }
-        if (item == RootsRegistry.HEALING_POULTICE.get()) {
+        if (item == RootsRegistry.HEALING_POULTICE) {
             entityLiving.heal(HEAL_LARGE);
         }
         return stack;
@@ -40,16 +40,16 @@ public class RootsFoodItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level levelAccessor, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, levelAccessor, tooltip, flagIn);
-        if (stack.is(RootsRegistry.REDCURRANT.get())) {
+        if (stack.is(RootsRegistry.REDCURRANT)) {
             tooltip.add(Component.translatable("rootsclassic.healingitem.tooltip").withStyle(ChatFormatting.GRAY));
         }
-        if (stack.is(RootsRegistry.ELDERBERRY.get())) {
+        if (stack.is(RootsRegistry.ELDERBERRY)) {
             tooltip.add(Component.translatable("rootsclassic.clearpotionsitem.tooltip").withStyle(ChatFormatting.GRAY));
         }
-        if (stack.is(RootsRegistry.HEALING_POULTICE.get())) {
+        if (stack.is(RootsRegistry.HEALING_POULTICE)) {
             tooltip.add(Component.translatable("rootsclassic.healingitem.tooltip").withStyle(ChatFormatting.GRAY));
         }
-        if (stack.is(RootsRegistry.NIGHTSHADE.get())) {
+        if (stack.is(RootsRegistry.NIGHTSHADE)) {
             tooltip.add(Component.translatable("rootsclassic.poisonitem.tooltip").withStyle(ChatFormatting.GRAY));
         }
     }

@@ -1,24 +1,6 @@
 package elucent.rootsclassic.compat.emi.recipe;
 
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.stack.EmiIngredient;
-import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.TextureWidget;
-import dev.emi.emi.api.widget.WidgetHolder;
-import elucent.rootsclassic.Const;
-import elucent.rootsclassic.compat.emi.EMIPlugin;
-import elucent.rootsclassic.registry.RootsRegistry;
-import elucent.rootsclassic.ritual.RitualBase;
-import elucent.rootsclassic.ritual.rituals.RitualCrafting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
-import org.apache.commons.compress.utils.Lists;
-
-import java.util.List;
-
+/*
 public class RitualRecipe implements EmiRecipe {
 	private final static ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Const.MODID, "textures/gui/jei/compat.png");
 	private final static ResourceLocation ALTAR_LOCATION = new ResourceLocation(Const.MODID, "textures/gui/tabletaltar.png");
@@ -98,12 +80,12 @@ public class RitualRecipe implements EmiRecipe {
 				int xShift, yShift;
 				Block block = blocks.get(i);
 				BlockPos pos = relativePosition.get(i);
-				if (block.equals(RootsRegistry.MUNDANE_STANDING_STONE.get())) {
+				if (block.equals(RootsRegistry.MUNDANE_STANDING_STONE)) {
 					xShift = 8 * pos.getX();
 					yShift = 8 * pos.getZ();
 					new TextureWidget(ALTAR_LOCATION, basePosX + xShift, basePosY + yShift, 16, 16, 192, 48).render(stack, mx, my, delta); // mundane stone
 				}
-				if (block.equals(RootsRegistry.ATTUNED_STANDING_STONE.get())) {
+				if (block.equals(RootsRegistry.ATTUNED_STANDING_STONE)) {
 					xShift = 8 * pos.getX();
 					yShift = 8 * pos.getZ();
 					new TextureWidget(ALTAR_LOCATION, basePosX + xShift, basePosY + yShift, 16, 16, 192, 64).render(stack, mx, my, delta); // attuned stone
@@ -125,3 +107,5 @@ public class RitualRecipe implements EmiRecipe {
 		}
 	}
 }
+
+ */

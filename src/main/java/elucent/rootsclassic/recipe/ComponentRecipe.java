@@ -3,10 +3,10 @@ package elucent.rootsclassic.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import elucent.rootsclassic.internal.RecipeMatcher;
 import elucent.rootsclassic.item.powder.SpellPowderItem;
 import elucent.rootsclassic.registry.RootsRecipes;
 import elucent.rootsclassic.registry.RootsRegistry;
-import io.github.fabricators_of_create.porting_lib.crafting.RecipeMatcher;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -38,7 +38,7 @@ public class ComponentRecipe implements Recipe<Container> {
     }
 
     public ComponentRecipe(ResourceLocation idIn, ResourceLocation effectResult, String groupIn, NonNullList<Ingredient> recipeItemsIn, boolean needsMixin) {
-        this(idIn, effectResult, groupIn, new ItemStack(RootsRegistry.SPELL_POWDER.get()), recipeItemsIn, needsMixin);
+        this(idIn, effectResult, groupIn, new ItemStack(RootsRegistry.SPELL_POWDER), recipeItemsIn, needsMixin);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ComponentRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return RootsRecipes.COMPONENT_SERIALIZER.get();
+        return RootsRecipes.COMPONENT_SERIALIZER;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ComponentRecipe implements Recipe<Container> {
 
     @Override
     public RecipeType<?> getType() {
-        return RootsRecipes.COMPONENT_RECIPE_TYPE.get();
+        return RootsRecipes.COMPONENT_RECIPE_TYPE;
     }
 
     @Override
@@ -137,10 +137,10 @@ public class ComponentRecipe implements Recipe<Container> {
      */
     private boolean isSupplementItem(ItemStack stack) {
         if (getResultItem().getItem() instanceof SpellPowderItem) {
-            return stack.getItem() == RootsRegistry.OLD_ROOT.get() ||
-                    stack.getItem() == RootsRegistry.VERDANT_SPRIG.get() ||
-                    stack.getItem() == RootsRegistry.INFERNAL_BULB.get() ||
-                    stack.getItem() == RootsRegistry.DRAGONS_EYE.get() ||
+            return stack.getItem() == RootsRegistry.OLD_ROOT ||
+                    stack.getItem() == RootsRegistry.VERDANT_SPRIG ||
+                    stack.getItem() == RootsRegistry.INFERNAL_BULB ||
+                    stack.getItem() == RootsRegistry.DRAGONS_EYE ||
                     stack.getItem() == Items.GLOWSTONE_DUST ||
                     stack.getItem() == Items.REDSTONE ||
                     stack.getItem() == Items.GUNPOWDER;
@@ -153,16 +153,16 @@ public class ComponentRecipe implements Recipe<Container> {
         int maxCapacity = -1;
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack stack = inventory.getItem(i);
-            if (stack.getItem() == RootsRegistry.OLD_ROOT.get() && maxCapacity < 0) {
+            if (stack.getItem() == RootsRegistry.OLD_ROOT && maxCapacity < 0) {
                 maxCapacity = 0;
             }
-            if (stack.getItem() == RootsRegistry.VERDANT_SPRIG.get() && maxCapacity < 1) {
+            if (stack.getItem() == RootsRegistry.VERDANT_SPRIG && maxCapacity < 1) {
                 maxCapacity = 1;
             }
-            if (stack.getItem() == RootsRegistry.INFERNAL_BULB.get() && maxCapacity < 2) {
+            if (stack.getItem() == RootsRegistry.INFERNAL_BULB && maxCapacity < 2) {
                 maxCapacity = 2;
             }
-            if (stack.getItem() == RootsRegistry.DRAGONS_EYE.get() && maxCapacity < 3) {
+            if (stack.getItem() == RootsRegistry.DRAGONS_EYE && maxCapacity < 3) {
                 maxCapacity = 3;
             }
         }

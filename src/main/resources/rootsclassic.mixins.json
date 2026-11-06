@@ -4,9 +4,13 @@
   "package": "elucent.rootsclassic.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "PlayerMixin",
+    "internal.InventoryMixin",
+    "internal.LivingEntityMixin"
   ],
   "client": [
+    "internal.client.ClientPacketListenerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

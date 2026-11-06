@@ -36,7 +36,7 @@ public class ImbuerBlock extends BaseBEBlock implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return createStandingStoneTicker(level, entityType, RootsRegistry.IMBUER_TILE.get());
+        return createStandingStoneTicker(level, entityType, RootsRegistry.IMBUER_TILE);
     }
 
     @Nullable

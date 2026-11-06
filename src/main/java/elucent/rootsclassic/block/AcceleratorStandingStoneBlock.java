@@ -29,7 +29,7 @@ public class AcceleratorStandingStoneBlock extends AttunedStandingStoneBlock imp
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return createStandingStoneTicker(level, entityType, RootsRegistry.ACCELERATOR_STANDING_STONE_TILE.get());
+        return createStandingStoneTicker(level, entityType, RootsRegistry.ACCELERATOR_STANDING_STONE_TILE);
     }
 
     @Nullable

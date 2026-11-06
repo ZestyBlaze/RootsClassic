@@ -3,8 +3,8 @@ package elucent.rootsclassic.component.components;
 import elucent.rootsclassic.component.ComponentBase;
 import elucent.rootsclassic.component.EnumCastType;
 import elucent.rootsclassic.util.RootsUtil;
-import io.github.fabricators_of_create.porting_lib.util.TierSortingRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Tier;
@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ComponentAzureBluet extends ComponentBase {
-
     public ComponentAzureBluet() {
         super(Blocks.AZURE_BLUET, 6);
     }
@@ -31,7 +30,7 @@ public class ComponentAzureBluet extends ComponentBase {
             usedTier = Tiers.IRON;
         }
 
-        if (TierSortingRegistry.isCorrectTierForDrops(usedTier, state) && state.getDestroySpeed(levelAccessor, pos) != -1) {
+        if (isCorrectTierForDrops(usedTier, state) && state.getDestroySpeed(levelAccessor, pos) != -1) {
             levelAccessor.destroyBlock(pos, true);
         }
     }
@@ -60,5 +59,15 @@ public class ComponentAzureBluet extends ComponentBase {
                 destroyBlockSafe(level, pos.south(), (int) potency);
             }
         }
+    }
+
+    private boolean isCorrectTierForDrops(Tier usedTier, BlockState state) {
+        if (state.getTags().anyMatch(blockTagKey -> blockTagKey.equals(BlockTags.NEEDS_IRON_TOOL) || blockTagKey.equals(BlockTags.NEEDS_DIAMOND_TOOL))) {
+            if (state.getTags().toList().contains(BlockTags.NEEDS_IRON_TOOL) && (usedTier == Tiers.IRON || usedTier == Tiers.DIAMOND || usedTier == Tiers.NETHERITE)) {
+                return true;
+            }
+            return state.getTags().toList().contains(BlockTags.NEEDS_DIAMOND_TOOL) && (usedTier == Tiers.DIAMOND || usedTier == Tiers.NETHERITE);
+        }
+        return false;
     }
 }

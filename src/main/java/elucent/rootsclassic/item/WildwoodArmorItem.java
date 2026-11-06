@@ -1,7 +1,7 @@
 package elucent.rootsclassic.item;
 
+import elucent.rootsclassic.internal.IArmorTickingItem;
 import elucent.rootsclassic.util.RootsUtil;
-import io.github.fabricators_of_create.porting_lib.item.ArmorTickListeningItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -12,8 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class WildwoodArmorItem extends ArmorItem implements ArmorTickListeningItem {
-
+public class WildwoodArmorItem extends ArmorItem implements IArmorTickingItem {
     public WildwoodArmorItem(ArmorMaterial materialIn, EquipmentSlot slot, Item.Properties builderIn) {
         super(materialIn, slot, builderIn);
     }

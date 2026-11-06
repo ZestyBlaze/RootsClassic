@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.jetbrains.annotations.Nullable;
 
 public class AestheticStandingStoneBlock extends AttunedStandingStoneBlock implements EntityBlock {
-
     public AestheticStandingStoneBlock(Properties properties) {
         super(properties);
     }
@@ -30,7 +29,7 @@ public class AestheticStandingStoneBlock extends AttunedStandingStoneBlock imple
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return createStandingStoneTicker(level, entityType, RootsRegistry.AESTHETIC_STANDING_STONE_TILE.get());
+        return createStandingStoneTicker(level, entityType, RootsRegistry.AESTHETIC_STANDING_STONE_TILE);
     }
 
     @Nullable

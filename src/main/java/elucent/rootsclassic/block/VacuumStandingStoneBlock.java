@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.jetbrains.annotations.Nullable;
 
 public class VacuumStandingStoneBlock extends AttunedStandingStoneBlock implements EntityBlock {
-
     public VacuumStandingStoneBlock(Properties properties) {
         super(properties);
     }
@@ -30,7 +29,7 @@ public class VacuumStandingStoneBlock extends AttunedStandingStoneBlock implemen
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return createStandingStoneTicker(level, entityType, RootsRegistry.VACUUM_STANDING_STONE_TILE.get());
+        return createStandingStoneTicker(level, entityType, RootsRegistry.VACUUM_STANDING_STONE_TILE);
     }
 
     @Nullable

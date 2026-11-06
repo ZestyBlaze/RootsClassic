@@ -17,7 +17,7 @@ import java.util.List;
 public class MutagenFlareOrchidRecipe extends MutagenRecipe {
 
     public MutagenFlareOrchidRecipe() {
-        super(new ResourceLocation(Const.MODID, "flare_orchid"), Blocks.BLUE_ORCHID.defaultBlockState(), RootsRegistry.FLARE_ORCHID.get().defaultBlockState());
+        super(new ResourceLocation(Const.MODID, "flare_orchid"), Blocks.BLUE_ORCHID.defaultBlockState(), RootsRegistry.FLARE_ORCHID.defaultBlockState());
         addIngredient(new ItemStack(Items.BLAZE_ROD, 1));
         addIngredient(new ItemStack(Items.LAVA_BUCKET, 1));
     }

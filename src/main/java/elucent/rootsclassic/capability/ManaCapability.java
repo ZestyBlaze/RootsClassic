@@ -3,8 +3,8 @@ package elucent.rootsclassic.capability;
 import net.minecraft.nbt.CompoundTag;
 
 public class ManaCapability implements IManaCapability {
-    private float maxMana = 40;
-    private float mana = 40;
+    private float maxMana;
+    private float mana;
 
     public ManaCapability() {
         this.maxMana = 40;

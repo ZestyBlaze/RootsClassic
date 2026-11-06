@@ -1,35 +1,6 @@
 package elucent.rootsclassic.lootmodifiers;
 
-import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import elucent.rootsclassic.Const;
-import elucent.rootsclassic.config.RootsConfig;
-import elucent.rootsclassic.registry.RootsRegistry;
-import elucent.rootsclassic.registry.RootsTags;
-import io.github.fabricators_of_create.porting_lib.PortingLibRegistries;
-import io.github.fabricators_of_create.porting_lib.loot.IGlobalLootModifier;
-import io.github.fabricators_of_create.porting_lib.loot.LootModifier;
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.Registry;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
-
+/*
 public class DropModifier {
 
     public static final LazyRegistrar<Codec<? extends IGlobalLootModifier>> GLM = LazyRegistrar.create(PortingLibRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Const.MODID);
@@ -101,3 +72,5 @@ public class DropModifier {
         }
     }
 }
+
+ */

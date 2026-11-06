@@ -2,17 +2,16 @@ package elucent.rootsclassic.entity;
 
 import elucent.rootsclassic.client.particles.MagicAuraParticleData;
 import elucent.rootsclassic.registry.RootsEntities;
-import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
-public class EntityAccelerator extends Entity implements ExtraSpawnDataEntity {
+public class EntityAccelerator extends Entity {
     private Entity entity;
     private final Random random = new Random();
     private int lifetime = 0;
@@ -23,7 +22,7 @@ public class EntityAccelerator extends Entity implements ExtraSpawnDataEntity {
     }
 
     public EntityAccelerator(Level levelAccessor, Entity entity, int potency, int size) {
-        this(RootsEntities.ENTITY_ACCELERATOR.get(), levelAccessor);
+        this(RootsEntities.ENTITY_ACCELERATOR, levelAccessor);
         this.entity = entity;
         this.potency = potency + 2;
         this.lifetime = 200 + 200 * size;
@@ -101,12 +100,6 @@ public class EntityAccelerator extends Entity implements ExtraSpawnDataEntity {
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return ExtraSpawnDataEntity.createExtraDataSpawnPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
-
-    @Override
-    public void readSpawnData(FriendlyByteBuf friendlyByteBuf) { }
-
-    @Override
-    public void writeSpawnData(FriendlyByteBuf friendlyByteBuf) { }
 }
